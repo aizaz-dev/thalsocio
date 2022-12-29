@@ -8,7 +8,7 @@ const cookieParser=require('cookie-parser');
 const bodyParser=require('body-parser');
 
 //import routes
-// const authRoutes=require('./Routes/auth')
+const authRoutes=require('./Routes/auth')
 // const userRoutes=require('./Routes/user')
 // const categoryRoutes=require('./Routes/category')
 // const productRoutes=require('./Routes/product')
@@ -25,10 +25,13 @@ app.use(bodyParser.json());
 
 
 //Routes Middelware
+app.use('/api',authRoutes) 
 // app.use('/api',userRoutes)
-// app.use('/api',authRoutes) 
 // app.use('/api',categoryRoutes)
 // app.use('/api',productRoutes)
+app.get('*', function(req, res){
+    res.send('what???', 404);
+  });
 
 //Database 
 mongoose.connect(db,{
@@ -40,3 +43,4 @@ mongoose.connect(db,{
     console.log('Listening on port :',port); 
 })
 
+mongoose.set('strictQuery', true)

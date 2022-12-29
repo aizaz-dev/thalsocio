@@ -9,12 +9,19 @@ const userSchema=new Schema({
         required:true,
         maxLength:32
     },
+    user_name:{
+        type:String,
+        required:true,
+        unique:true
+    },
     email:{
         type:String,
         trim:true,
         required:true,
-        unique:32
+        unique:true,
+        maxLength:32
     },
+    salt:String,
     hashed_password:{
         type:String,
         required:true,
@@ -23,7 +30,6 @@ const userSchema=new Schema({
         type:String,
         trim:true,
     },
-    salt:String,
     pic:{
         type:String,
     }
@@ -31,12 +37,13 @@ const userSchema=new Schema({
 
 },{timestamps:true});
 
-userSchema.statics.signup=async function({name,email,password}){
+userSchema.statics.signup=async function({name,user_name,email,password,bio,pic}){
     const salt=await bcrypt.genSalt(10);
-    console.log("salt :",salt);
+    //console.log("salt :",salt);
     const hash=await bcrypt.hash(password,salt);
-    console.log("pwd",hash)
-    const user=await this.create({name,email,salt:salt,hashed_password:hash})
+    //console.log("pwd",hash)
+    //console.log({name,user_name,email,salt:salt,hashed_password:hash,bio,pic})
+    const user=await this.create({name,user_name,email,salt:salt,hashed_password:hash,bio,pic})
     console.log("user created")
     return user;
 }
