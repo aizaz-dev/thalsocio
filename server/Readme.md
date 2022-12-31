@@ -24,7 +24,7 @@ environment running
 
 Say what the step will be
 
-    **npm i express morgan mongoose dotenv cors cookie-parser body-parser jsonwebtoken bcrypt express-jwt express-validator**
+    **npm i express morgan mongoose dotenv cors cookie-parser body-parser jsonwebtoken bcrypt express-jwt express-validator multer**
 
 And repeat
 

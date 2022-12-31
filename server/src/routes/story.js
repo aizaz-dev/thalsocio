@@ -1,32 +1,46 @@
-/*
 const express = require("express");
 const router = express.Router();
+const { requireSignin, isAuth } = require("../controllers/auth");
+/*
 const { create, 
-        productById,
+        storyById,
         readSingle,
-        deleteProduct,
-        updateProduct,
+        deletestory,
+        updatestory,
         list,
         listRelated,
         listCategories,
         listBySearch,
-        productPhoto,
-     } = require("../controllers/product");
-const { requireSignin, isAuth, isAdmin } = require("../controllers/auth");
+        storyPhoto,
+     } = require("../controllers/story");
 const {userById}=require('../controllers/user')
 
-router.get("/product/:productId",readSingle)
-router.post("/product/create/:userId", requireSignin, isAuth, isAdmin, create);
-router.delete("/product/:productId/:userId", requireSignin,isAuth, isAdmin,deleteProduct)
-router.put("/product/:productId/:userId", requireSignin,isAuth, isAdmin,updateProduct)
-router.param("userId",userById)
-router.param("productId",productById)
-router.get("/products",list)
-router.get("/products/related/:productId",listRelated)
-router.get("/products/categories", listCategories)
-router.post("/products/by/search", listBySearch)
-router.get("/product/photo/:productId", productPhoto)
-
-module.exports=router
+router.get("/storys",list)
+router.get("/storys/related/:storyId",listRelated)
+router.get("/storys/categories", listCategories)
+router.post("/storys/by/search", listBySearch)
+router.get("/story/photo/:storyId", storyPhoto)
 
 */
+//Params for making available in req body
+router.param("userId",userById)
+router.param("storyId",storyById)
+//Get Story by ID
+router.get("/story/:storyId",readSingle)
+//Create new story
+router.post("/story/create/:userId", requireSignin, isAuth, create);
+//Edit Story
+router.put("/story/:storyId/:userId", requireSignin,isAuth,updatestory)
+//Delete Story
+router.delete("/story/:storyId/:userId", requireSignin,isAuth,deletestory)
+//Get Stories for timeline most recent with pagination
+//Get Stories for User timelines with pagination
+//Get Stories for User Engagement page
+//Vote a Story
+//Comment a Story
+//lederboard
+//Sortable userTimeline timestamps upvotes downvotes
+//Sortable Timeline timestamps upvotes downvotes
+
+
+module.exports=router
