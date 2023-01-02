@@ -9,7 +9,7 @@ const bodyParser=require('body-parser');
 
 //import routes
 const authRoutes=require('./Routes/auth')
-// const userRoutes=require('./Routes/user')
+const userRoutes=require('./Routes/user')
 // const categoryRoutes=require('./Routes/category')
 // const productRoutes=require('./Routes/product')
 //variable
@@ -26,7 +26,7 @@ app.use(bodyParser.json());
 
 //Routes Middelware
 app.use('/api',authRoutes) 
-// app.use('/api',userRoutes)
+ app.use('/api',userRoutes)
 // app.use('/api',categoryRoutes)
 // app.use('/api',productRoutes)
 app.get('*', function(req, res){

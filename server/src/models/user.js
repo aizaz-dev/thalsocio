@@ -34,7 +34,7 @@ const userSchema=new Schema({
         type:String,
     }
 
-
+ 
 },{timestamps:true});
 
 userSchema.statics.signup=async function({name,user_name,email,password,bio,pic}){
@@ -54,4 +54,4 @@ userSchema.statics.signin=async function(user,password){
     return(match)
 }
 
-module.exports=mongoose.model('User',userSchema)
+module.exports=mongoose.models.User || mongoose.model('User',userSchema) 

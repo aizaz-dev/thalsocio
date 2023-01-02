@@ -1,7 +1,7 @@
 const express=require('express');
 const {signUp,signIn,signOut,requireSignin} =require('../controllers/auth');
 const {userSignupValidation}=require('../helpers/validator');
-const {profilePicUpload,upload}=require('../helpers/filehandler')
+const {upload}=require('../helpers/filehandler')
 const router=express.Router();
 
 //Signup routes

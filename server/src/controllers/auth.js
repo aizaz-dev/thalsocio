@@ -12,6 +12,7 @@ const createToken = (_id) => {
 exports.signUp = async (req, res) => {
   const { email, user_name } = req.body;
   console.log("req.body", req.body);
+
   const email_exist=await User.find({ "email":email })
   //console.log(email_exist)
    if (email_exist.length) {
@@ -28,8 +29,7 @@ exports.signUp = async (req, res) => {
        .status(400)
        .json({ error: "User Name already in use. Please choose a uniue username" });
    }
-   console.log(__dirname)
-   const path=__dirname+'\\'+req.file.path ||""
+   const path=(__dirname+'\\'+req.file.path) ||""
 
   try {
     const user = await User.signup({...req.body,pic:path}); 
