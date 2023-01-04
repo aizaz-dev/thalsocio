@@ -36,7 +36,7 @@ let upload = multer({
 exports.update = (req, res) => {
   upload(req, res, (err) => {
     if (err) {
-      // An error occurred when uploading to server memory
+      // An error occurred when uploading to server story
       return res.status(502).json(err);
     }
     User.findOneAndUpdate(
@@ -57,8 +57,8 @@ exports.update = (req, res) => {
 };
 
 exports.updatePic = (req, res) => {
-   
-  const path = __dirname + "\\" + req.file.path || "";
+  
+  const path = req.file?req.file.path.replace(/\\/g, '/') : "";
   User.findOneAndUpdate(
     { _id: req.profile._id },
     { $set: { pic: path } },
@@ -75,3 +75,7 @@ exports.updatePic = (req, res) => {
     }
   );
 };
+
+exports.userCount=()=>{
+  return User.countDocuments({})
+}

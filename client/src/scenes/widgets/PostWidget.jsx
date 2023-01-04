@@ -14,34 +14,41 @@ import {
   
   const PostWidget = ({
     postId,
-    postUserId,
-    name,
+    authorId,
+    userName,
     description,
-    location,
-    pic,
+    tags,
+    content,
     userPicturePath,
-    likes=123,
-    comments,
+    upVote,
+    downVote,
+    vote
   }) => {
     const [isComments, setIsComments] = useState(false);
     const dispatch = useDispatch();
     const token = useSelector((state) => state.token);
     const loggedInUserId = useSelector((state) => state.user._id);
-    const isLiked = Boolean(likes[loggedInUserId]);
-    const likeCount = Object.keys(likes).length;
+    const isLiked = true//
+    const likeCount = upVote//
+    const basePath='http://127.0.0.1:3001/'
   
     const { palette } = useTheme();
     const main = palette.neutral.main;
     const primary = palette.primary.main;
   
-    const patchLike = async () => {
-      const response = await fetch(`http://localhost:3001/posts/${postId}/like`, {
+    const patchLike = async (e) => {
+      const response = await fetch(`http://localhost:3001/api/vote/${postId}`, {
         method: "PATCH",
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ userId: loggedInUserId }),
+        body: JSON.stringify({ 
+          userId: loggedInUserId,
+          storyId:postId,
+          value:e
+        
+        }),
       });
       const updatedPost = await response.json();
       dispatch(setPost({ post: updatedPost }));
@@ -50,18 +57,20 @@ import {
     return (
       <WidgetWrapper m="2rem 0">
         <Author
-          authorId={postUserId}
+          authorId={authorId}
+          authorName={userName}
+          authorPic={userPicturePath}
         />
         <Typography color={main} sx={{ mt: "1rem" }}>
           {description}
         </Typography>
-        {pic && (
+        {content && (
           <img
             width="100%"
             height="auto"
             alt="post"
             style={{ borderRadius: "0.75rem", marginTop: "0.75rem" }}
-            src={`${pic}`}
+            src={basePath+content}
           />
         )}
         <FlexBetween mt="0.25rem">
@@ -81,7 +90,7 @@ import {
               <IconButton onClick={() => setIsComments(!isComments)}>
                 <ChatBubbleOutlineOutlined />
               </IconButton>
-              <Typography>{comments.length}</Typography>
+              <Typography>12</Typography>
             </FlexBetween>
           </FlexBetween>
   
@@ -89,7 +98,7 @@ import {
             <ShareOutlined />
           </IconButton>
         </FlexBetween>
-        {isComments && (
+        {/* {isComments && (
           <Box mt="0.5rem">
             {comments.map((comment, i) => (
               <Box key={`${name}-${i}`}>
@@ -101,7 +110,7 @@ import {
             ))}
             <Divider />
           </Box>
-        )}
+        )} */}
       </WidgetWrapper>
     );
   };

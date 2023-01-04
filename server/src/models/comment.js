@@ -3,7 +3,7 @@ const Schema=mongoose.Schema;
 const {ObjectId}=Schema;
 
 const commentSchema=new Schema({
-    memoryId:{
+    storyId:{
         type:Schema.Types.ObjectId,
         required:true,
     },

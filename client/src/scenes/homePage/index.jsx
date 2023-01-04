@@ -5,7 +5,7 @@ import Navbar from "../navBar/index";
 import UserWidget from "../widgets/UserWidget";
 import CreatePostWidget from '../widgets/CreatePostWidget';
 import Author from '../../components/Author';
-import PostWidget from '../widgets/PostWidget';
+import PostsWidget from '../widgets/PostsWidget';
 
 function HomePage() {
   const isNonMobileScreens = useMediaQuery("(min-width:1000px)");
@@ -26,7 +26,8 @@ function HomePage() {
       <Box flexBasis={isNonMobileScreens ? "42%" : undefined}
           mt={isNonMobileScreens ? undefined : "2rem"} >
           <CreatePostWidget/>
-          <PostWidget/>
+          <PostsWidget/>
+          
       </Box>
       <Box flexBasis={isNonMobileScreens ? "30%" : undefined}>
       <UserWidget userId={_id}  />

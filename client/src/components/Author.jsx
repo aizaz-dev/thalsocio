@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import FlexBetween from "./FlexBetween";
 import UserImage from "./UserImage";
 
-const Author = ({ authorId }) => {
+const Author = ({ authorName,authorPic,authorId }) => {
   const [author, setAuthor] = useState(null)
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -17,33 +17,33 @@ const Author = ({ authorId }) => {
   const main = palette.neutral.main;
   const medium = palette.neutral.medium;
 
-  const getAuthor = async () => {
-    const response = await fetch(`http://localhost:3001/api/user/${authorId}`, {
-      method: "GET",
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    const data = await response.json();
-    setAuthor(data);
-  };
+  // const getAuthor = async () => {
+  //   const response = await fetch(`http://localhost:3001/api/user/${authorId}`, {
+  //     method: "GET",
+  //     headers: { Authorization: `Bearer ${token}` },
+  //   });
+  //   const data = await response.json();
+  //   setAuthor(data);
+  // };
 
   useEffect(() => {
-    getAuthor();
+    //getAuthor();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  if (!author) {
-    return null;
-  }
+  // if (!author) {
+  //   return null;
+  // }
 
-  const {
-    name,
-    pic,
-  } = author;
+  // const {
+  //   name,
+  //   pic,
+  // } = author;
  
 
   return (
     <FlexBetween>
       <FlexBetween gap="1rem">
-        <UserImage image={pic} size="55px" />
+        <UserImage image={authorPic} size="55px" />
         <Box
           onClick={() => {
             navigate(`/profile/${authorId}`);
@@ -61,7 +61,7 @@ const Author = ({ authorId }) => {
               },
             }}
           >
-            {name}
+            {authorName}
           </Typography>
         </Box>
       </FlexBetween>

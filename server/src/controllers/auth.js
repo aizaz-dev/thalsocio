@@ -29,7 +29,7 @@ exports.signUp = async (req, res) => {
        .status(400)
        .json({ error: "User Name already in use. Please choose a uniue username" });
    }
-   const path=(__dirname+'\\'+req.file.path) ||""
+   const path = req.file?req.file.path.replace(/\\/g, '/') : "";
 
   try {
     const user = await User.signup({...req.body,pic:path}); 
@@ -50,7 +50,7 @@ exports.signIn = async (req, res) => {
     return res.status(400).json({ error: "All fields must be filled" });
   }
 
-  User.findOne({ email }, async (err, user) => {
+  User.findOne({ email }, async (err, user) => { 
     if (!user || err) {
       return res
         .status(400)

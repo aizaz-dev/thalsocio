@@ -32,7 +32,7 @@ function CreatePostWidget() {
   const [image, setImage] = useState(null);
   const [post, setPost] = useState("");
   const { palette } = useTheme();
-  const { _id } = useSelector((state) => state.user);
+  const { _id,pic } = useSelector((state) => state.user);
   const token = useSelector((state) => state.token);
   const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
   const mediumMain = palette.neutral.mediumMain;
@@ -40,14 +40,13 @@ function CreatePostWidget() {
 
   const handlePost = async () => {
     const formData = new FormData();
-    formData.append("userId", _id);
-    formData.append("description", post);
+    formData.append("message", post);
+    formData.append("tags", '#post');
     if (image) {
-      formData.append("picture", image);
-      formData.append("picturePath", image.name);
+      formData.append("content", image);  
     }
 
-    const response = await fetch(`http://localhost:3001/posts`, {
+    const response = await fetch(`http://localhost:3001/api/story/create/${_id}`, {
       method: "POST",
       headers: { Authorization: `Bearer ${token}` },
       body: formData,
@@ -61,7 +60,7 @@ function CreatePostWidget() {
   return (
     <WidgetWrapper>
       <FlexBetween gap="1.5rem">
-        <UserImage size="50px" />
+        <UserImage image={pic} size="50px" />
         <InputBase
           placeholder="What's on your mind..."
           onChange={(e) => setPost(e.target.value)}

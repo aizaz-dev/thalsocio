@@ -15,6 +15,14 @@ const storySchema=new Schema({
     },
     styling:{},
     tags:[String],
+    upVote:{
+        type:Number,
+        default:0
+    },
+    downVote:{
+        type:Number,
+        default:0
+    }
 
 
 },{timestamps:true});
