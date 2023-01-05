@@ -70,6 +70,7 @@ const PostsWidget = ({ userId, isProfile = false }) => {
             upVote={upVote}
             downVote={downVote}
             vote={vote}
+            createdAt={createdAt}
           />
         )
       )}

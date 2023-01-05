@@ -13,6 +13,7 @@ const authRoutes=require('./Routes/auth')
 const userRoutes=require('./Routes/user')
 const storyRoutes=require('./Routes/story')
 const voteRoutes=require('./Routes/vote')
+const commentRoutes=require('./Routes/comment')
 
 // const productRoutes=require('./Routes/product')
 //variable
@@ -32,6 +33,7 @@ app.use('/api',authRoutes)
  app.use('/api',userRoutes)
 app.use('/api',storyRoutes)
 app.use('/api',voteRoutes)
+app.use('/api',commentRoutes)
 // app.use('/api',productRoutes)
 app.get('*', function(req, res){
     res.send('what???', 404);

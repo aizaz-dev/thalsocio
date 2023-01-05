@@ -7,8 +7,7 @@ import FlexBetween from "./FlexBetween";
 import UserImage from "./UserImage";
 import {timeSince} from "../helpers/functions"
 
-const Author = ({ authorName,authorPic,authorId,createdAt }) => {
-  const [author, setAuthor] = useState(null)
+const Comment = ({ authorName,authorPic,authorId,createdAt,message }) => {
   const [time, setTime] = useState('')
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -22,12 +21,12 @@ const Author = ({ authorName,authorPic,authorId,createdAt }) => {
   useEffect(() => {
 
     setTime(timeSince(createdAt))
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, []); 
 
   return (
     <FlexBetween>
       <FlexBetween gap="1rem">
-        <UserImage image={authorPic} size="55px" />
+        <UserImage image={authorPic} size="30px" />
         <Box
           onClick={() => {
             navigate(`/profile/${authorId}`);
@@ -47,6 +46,7 @@ const Author = ({ authorName,authorPic,authorId,createdAt }) => {
           >
             {authorName}
           </Typography>
+          <Typography>{message}</Typography>
           <Typography sx={{ color: medium }}>{time}</Typography>
         </Box>
       </FlexBetween>
@@ -58,4 +58,4 @@ const Author = ({ authorName,authorPic,authorId,createdAt }) => {
   );
 };
 
-export default Author;
+export default Comment;

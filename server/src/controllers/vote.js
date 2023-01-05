@@ -16,10 +16,10 @@ exports.addVote=async (req,res)=>{
                 }else{
                     Story.findOneAndUpdate({_id:req.body.storyId},{$inc:{upVote:1}})
                 }
-                res.status(200).send({msg:"Updated"})
+                res.status(200).json({msg:"Updated"})
             })
         }catch{
-            res.status(400),send({err:"Unable to add vote"})
+            res.status(400).json({err:"Unable to add vote"})
         }
     }else{
         try{
@@ -29,10 +29,10 @@ exports.addVote=async (req,res)=>{
                 }else{
                     Story.findOneAndUpdate({_id:req.body.storyId},{$inc:{upVote:1}})
                 }
-                res.status(200).send({msg:"Added"})
+                res.status(200).json({msg:"Added"})
             })
             }catch{    
-                res.status(400),send({err:"Unable to add vote"})
+                res.status(400).json({err:"Unable to add vote"})
         }
     }
     
@@ -52,7 +52,7 @@ exports.deleteVote=async (req,res)=>{
 
                     res.status(400).json({err:"Unable to add vote"})
                 }else{
-                    res.status(200).send({msg:"Deleted"})
+                    res.status(200).json({msg:"Deleted"})
 
                 }
             })  

@@ -11,7 +11,7 @@ const commentSchema=new Schema({
         type:Schema.Types.ObjectId,
         required:true,
     },
-    commen:{
+    comment:{
         type:String,
         required:true
     }, 
