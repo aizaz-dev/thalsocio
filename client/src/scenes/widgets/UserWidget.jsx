@@ -28,6 +28,7 @@ import {
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = await response.json();
+      
       setUser(data);
     };
   

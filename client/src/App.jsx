@@ -7,6 +7,9 @@ import { useSelector } from "react-redux";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { createTheme } from "@mui/material/styles";
 import { themeSettings } from "./theme";
+import Trending from "./scenes/trendingPage";
+import LeaderBoard from "./scenes/leaderboardPage.jsx";
+import PageNotFound from "./scenes/pageNotFound";
 
 function App() {
   const mode = useSelector((state) => state.mode);
@@ -19,9 +22,10 @@ function App() {
           <Routes>
             <Route path="/" element={<LoginPage/>} />
             <Route path="/home" element={<HomePage/>} />
-            <Route path="/profile:userId" element={<ProfilePage/>} />
-            {/* Route for trending */}
-            {/* Route for LeaderBoard */}
+            <Route path="/profile/:userId" element={<ProfilePage/>} />
+            <Route path="/trending" element={<Trending/>}/>
+            <Route path="/leaderboard" element={<LeaderBoard/>} />
+            <Route path="*" element={<PageNotFound/>} />
           </Routes>
         </ThemeProvider>
       </BrowserRouter>

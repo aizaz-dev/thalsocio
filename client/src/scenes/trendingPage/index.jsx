@@ -1,17 +1,12 @@
 import React from 'react'
 import { Box, useMediaQuery } from "@mui/material";
 import { useSelector } from "react-redux";
-import { useParams } from 'react-router-dom';
-import Navbar from "../navBar/index";
-import UserWidget from "../widgets/UserWidget";
-import CreatePostWidget from '../widgets/CreatePostWidget';
 import PostsWidget from '../widgets/PostsWidget';
-import SortWidget from '../widgets/SortWidget';
+import Navbar from '../navBar';
 
-function ProfilePage() {
+function Trending() {
   const isNonMobileScreens = useMediaQuery("(min-width:1000px)");
-  const { _id } = useParams();
-  console.log(_id)
+  const { _id } = useSelector((state) => state.user);
   return (
     <Box>
       <Navbar/>
@@ -23,22 +18,20 @@ function ProfilePage() {
         justifyContent="space-between"
       >
       <Box flexBasis={isNonMobileScreens ? "15%" : undefined} >
-          <SortWidget/>
+          {/* <SortWidget/> */}
       </Box>
       <Box flexBasis={isNonMobileScreens ? "42%" : undefined}
           mt={isNonMobileScreens ? undefined : "2rem"} >
-          <CreatePostWidget/>
+          {/* <CreatePostWidget/> */}
           <PostsWidget/>
           
       </Box>
       <Box flexBasis={isNonMobileScreens ? "30%" : undefined}>
-      {<UserWidget userId={_id}  />}
+      {/* <UserWidget userId={_id}  /> */}
       </Box>
       </Box>
     </Box>
   )
 }
 
-
-export default ProfilePage
-
+export default Trending

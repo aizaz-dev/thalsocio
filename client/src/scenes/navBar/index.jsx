@@ -9,16 +9,18 @@ import {
   FormControl,
   useTheme,
   useMediaQuery,
+  Tooltip,
 } from "@mui/material";
 import {
   Search,
-  Message,
+  Whatshot,
   DarkMode,
   LightMode,
   Notifications,
   Help,
   Menu,
   Close,
+  LeaderboardSharp,
 } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
 import { setMode, setLogout } from "../../state";
@@ -76,6 +78,7 @@ const Navbar = () => {
       {/* DESKTOP NAV */}
       {isNonMobileScreens ? (
         <FlexBetween gap="2rem">
+        <Tooltip title="Dark/Bright Mode">
           <IconButton onClick={() => dispatch(setMode())}>
             {theme.palette.mode === "dark" ? (
               <DarkMode sx={{ fontSize: "25px" }} />
@@ -83,8 +86,19 @@ const Navbar = () => {
               <LightMode sx={{ color: dark, fontSize: "25px" }} />
             )}
           </IconButton>
-          <Message sx={{ fontSize: "25px" }} />
-          <Notifications sx={{ fontSize: "25px" }} />
+          </Tooltip>
+          <Tooltip title="Trending">
+            <IconButton onClick={() => navigate("/trending")}>
+              <Whatshot sx={{ color:dark, fontSize: "25px" }} />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Leader Board">
+            <IconButton onClick={() => navigate("/leaderboard")}>
+              <LeaderboardSharp sx={{color:dark, fontSize: "25px" }} />
+            </IconButton>
+          </Tooltip>
+
+          
           <Help sx={{ fontSize: "25px" }} />
           <FormControl variant="standard" value={fullName}>
             <Select

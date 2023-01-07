@@ -75,6 +75,8 @@ exports.readSingle=async(req,res)=>{
                 vote:{$ifNull:["$vote",'-1']},
     
                 }
+            },{
+                $sort:{createdAt:-1}
             } 
             ]) 
     return res.json(story)

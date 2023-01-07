@@ -2,7 +2,9 @@ const User = require("../Models/user");
 const multer = require("multer");
 
 exports.userById = async (req, res, next, id) => {
-  console.log("Finding user By Id");
+if(!id){
+  res.status(400).json({error:"Invalid user id"}) 
+}
   User.findById(id).exec((err, user) => {
     if (err || !user) {
       res.status(400).json({ error: "User not found" });
@@ -15,11 +17,15 @@ exports.userById = async (req, res, next, id) => {
 };
 
 exports.read = (req, res) => {
-  //console.log("getting from req profile ",req.profile)
-
+try{
   req.profile.hashed_password = undefined;
   req.profile.salt = undefined;
   return res.status(200).json(req.profile);
+}catch(err){
+  
+}
+
+
 };
 
 const storage = multer.memoryStorage();

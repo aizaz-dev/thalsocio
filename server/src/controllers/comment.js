@@ -3,11 +3,10 @@ const mongoose=require('mongoose')
 
 exports.addComment=async (req,res)=>{
     try{
-        Comment.create({...req.body}).then(()=>{
-            res.status(200).send({msg:"Comment Added"})
-        })
+        const newComment=await Comment.create({...req.body})
+            res.status(200).json(newComment)
         }catch{    
-            res.status(400).send({err:"Unable to add comment"})
+            res.status(400).senjsond({err:"Unable to add comment"})
     }
 }
 

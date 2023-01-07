@@ -2,8 +2,8 @@ import {createSlice} from "@reduxjs/toolkit"
 
 const initialState={
     mode:"light",
-    user:'n',
-    token:null,
+    user:JSON.parse(localStorage.getItem('user')),
+    token:localStorage.getItem('jwt'),
     posts:[]
 }
 
@@ -15,8 +15,8 @@ export const authSlice=createSlice({
             state.mode=state.mode==="light"?"dark":"light"
         },
         setLogin:(state,action)=>{
-            state.user=action.payload.user
-            state.token=action.payload.token
+            state.user=localStorage.getItem('user')//action.payload.user
+            state.token=localStorage.getItem('jwt')//action.payload.token
         },
         setLogout:(state)=>{
             state.user=null

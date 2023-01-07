@@ -49,6 +49,7 @@ const initialValuesLogin = {
 
 const Form = () => {
   const [pageType, setPageType] = useState("login");
+  const [error, setError] = useState("");
   const { palette } = useTheme();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -87,14 +88,19 @@ const Form = () => {
     });
     const loggedIn = await loggedInResponse.json();
     onSubmitProps.resetForm();
-    if (loggedIn) {
-      dispatch(
-        setLogin({
-          user: loggedIn.user,
-          token: loggedIn.token,
-        })
-      );
+    if (loggedIn.user) {
+      console.log(loggedIn.user)
+      localStorage.setItem('jwt',loggedIn.token)
+      localStorage.setItem('user',JSON.stringify(loggedIn.user))
+      // dispatch(
+      //   setLogin({
+      //     user: loggedIn.user,
+      //     token: loggedIn.token,
+      //   }) 
+      // );
       navigate("/home");
+    }else if(loggedIn.error){
+        setError(loggedIn.error)
     }
   };
 

@@ -4,6 +4,7 @@ import {
     DeleteOutlined,
     ImageOutlined,
     MoreHorizOutlined,
+    CommentsDisabled,
     
   } from "@mui/icons-material";
   import SendIcon from '@mui/icons-material/Send';
@@ -18,9 +19,9 @@ import UserImage from './UserImage';
 import { useSelector } from 'react-redux';
 
   
-function AddComment({postId}) {
+function AddComment({postId,commentUpdater,Comments}) {
     const [comment, setComment] = useState("");
-    const { _id,pic } = useSelector((state) => state.user);
+    const { _id,pic,name } = useSelector((state) => state.user);
     const token = useSelector((state) => state.token);
     const { palette } = useTheme();
     const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
@@ -42,8 +43,12 @@ function AddComment({postId}) {
           }),
         });
         const posts = await response.json();
+        posts.userId=_id
+        posts.userPic=pic
+        posts.userName=name
         // dispatch(setPosts({ posts }));
-
+        commentUpdater([...Comments,posts])
+        console.log(posts)
         setComment("");
       };
 

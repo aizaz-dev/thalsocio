@@ -1,6 +1,5 @@
 import {
   ChatBubbleOutlineOutlined,
-  FavoriteBorderOutlined,
   ThumbDownOutlined,
   ThumbUpOutlined,
   ShareOutlined,
@@ -156,7 +155,7 @@ const PostWidget = ({
               </Box>
             ))}
             <Divider />
-            <AddComment postId={postId}/>
+            <AddComment postId={postId} commentUpdater={setComments} Comments={comments}/>
           </Box>
         )}
     </WidgetWrapper>
