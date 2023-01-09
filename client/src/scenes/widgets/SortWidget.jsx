@@ -1,4 +1,4 @@
-import { ViewList, ViewModule } from "@mui/icons-material";
+import { ViewList, ViewModule,AccessTime,ThumbUpOutlined,ThumbDownOutlined,TrendingUp,TrendingDown } from "@mui/icons-material";
 import {
   ToggleButton,
   ToggleButtonGroup,
@@ -9,10 +9,15 @@ import {
   Divider,
 } from "@mui/material";
 import React, { useState } from "react";
+import {useSelector,useDispatch} from "react-redux"
 import WidgetWraper from "../../components/WidgetWraper";
+import { setView,setSort,setTrend } from "../../state";
 function SortWidget() {
-  const [view, setView] = useState("list");
-  const [sort,setSort]=useState("time")
+  const dispatch=useDispatch()
+  const view=useSelector(state=>state.view)
+  const sort=useSelector(state=>state.sort)
+  const trend=useSelector(state=>state.trend)
+
   const { palette } = useTheme();
   const dark = palette.neutral.dark;
   const medium = palette.neutral.medium;
@@ -20,12 +25,18 @@ function SortWidget() {
 
   const handleView = (event, nextView) => {
     if(nextView!=null){
-        setView(nextView);   
+      dispatch(setView({view:nextView})   )
+        
     }
   };
   const handleSort = (event, nextView) => {
     if(nextView!=null){
-        setSort(nextView);   
+        dispatch(setSort({sort:nextView}))  
+    }
+  };
+  const handleTrend = (event, nextView) => {
+    if(nextView!=null){
+        dispatch(setTrend({trend:nextView}))  
     }
   };
   return (
@@ -58,19 +69,41 @@ function SortWidget() {
           Sort By
         </Typography>
         <Box display="flex" justifyContent="center">
+
           <ToggleButtonGroup color="primary" value={sort} exclusive onChange={handleSort}>
-            
+            <Tooltip title="Time">
               <ToggleButton value="time" aria-label="time" selected={sort=='time'}>
-                Time
+                <AccessTime/>
               </ToggleButton>
+              </Tooltip>
          
-           
+              <Tooltip title="Up Votes">
               <ToggleButton value="upvote" aria-label="upvote" selected={sort=="upvote"}>
-                Up Vote
+                <ThumbUpOutlined/>
               </ToggleButton>
+              </Tooltip>
+
+              <Tooltip title="Down Votes">
               <ToggleButton value="downvote" aria-label="downvote" selected={sort=="downvote"}>
-                Down Vote
+                <ThumbDownOutlined/>
               </ToggleButton>
+              </Tooltip>
+         
+          </ToggleButtonGroup>
+        </Box>
+        <Box display="flex" justifyContent="center" marginTop='0.3rem'>
+        <ToggleButtonGroup color="primary" value={trend} exclusive onChange={handleTrend}>
+            <Tooltip title="Ascending">
+              <ToggleButton value="+" aria-label="+" selected={trend=='+'}>
+                <TrendingUp/>
+              </ToggleButton>
+              </Tooltip>
+         
+              <Tooltip title="Descending">
+              <ToggleButton value="-" aria-label="-" selected={trend=="-"}>
+                <TrendingDown/>
+              </ToggleButton>
+              </Tooltip>
          
           </ToggleButtonGroup>
         </Box>

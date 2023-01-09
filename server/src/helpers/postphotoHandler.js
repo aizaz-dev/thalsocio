@@ -29,8 +29,7 @@ const upload = multer({
     limits: {
         fileSize: 1024 * 1024 * 10 //15mb
     },
-    fileFilter:uploadFilter,
-    preservePath:false
+    fileFilter:uploadFilter
 })
 
 

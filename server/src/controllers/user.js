@@ -15,7 +15,7 @@ if(!id){
     next();
   });
 };
-
+ 
 exports.read = (req, res) => {
 try{
   req.profile.hashed_password = undefined;

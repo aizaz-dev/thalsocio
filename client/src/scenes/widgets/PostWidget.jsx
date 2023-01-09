@@ -3,16 +3,28 @@ import {
   ThumbDownOutlined,
   ThumbUpOutlined,
   ShareOutlined,
+  EditOutlined,
+  DeleteOutline,
 } from "@mui/icons-material";
-import { Box, Divider, IconButton, Typography, useTheme } from "@mui/material";
+import {
+  Box,
+  Divider,
+  IconButton,
+  Popover,
+  Tooltip,
+  Typography,
+  useTheme,
+} from "@mui/material";
 import FlexBetween from "../../components/FlexBetween";
 import Author from "../../components/Author";
 import Comment from "../../components/comment";
 import AddComment from "../../components/AddComment";
 import WidgetWrapper from "../../components/WidgetWraper";
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setPost } from "../../state";
+import EditPostWidget from "./EditPostWidget";
+import { imgPath } from "../../helpers/functions"
 
 const PostWidget = ({
   postId,
@@ -28,29 +40,33 @@ const PostWidget = ({
   createdAt,
 }) => {
   const [isComments, setIsComments] = useState(false);
-  const [comments,setComments]=useState([])
+  const [comments, setComments] = useState([]);
+  const [edit, setEdit] = useState(false);
   const dispatch = useDispatch();
   const token = useSelector((state) => state.token);
   const loggedInUserId = useSelector((state) => state.user._id);
-  let isUpVoted = vote==='1'; //
-  let isDownVoted = vote==='0'; //
+  let isUpVoted = vote === "1"; //
+  let isDownVoted = vote === "0"; //
+  content = imgPath(content,'post')
 
-  const basePath = "http://127.0.0.1:3001/";
 
   const { palette } = useTheme();
   const main = palette.neutral.main;
   const primary = palette.primary.main;
 
   const getComments = async () => {
-    const response = await fetch(`http://localhost:3001/api/comment/${postId}`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const response = await fetch(
+      `http://localhost:3001/api/comment/${postId}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
     const commentsReceived = await response.json();
-    setComments(commentsReceived)
-    console.log(comments)
+    setComments(commentsReceived);
+    console.log(comments);
     dispatch(setPost({ comments: commentsReceived }));
   };
 
@@ -71,25 +87,54 @@ const PostWidget = ({
       }
     );
     //Have to update state
-     const updatedPost = await response.json();
-     vote=e;
-     upVote+=1
-     isUpVoted = vote==='1'; //
-     isDownVoted = vote==='0'; //
+    const updatedPost = await response.json();
+    vote = e;
+    upVote += 1;
+    isUpVoted = vote === "1"; //
+    isDownVoted = vote === "0"; //
     // dispatch(setPost({ post: updatedPost }));
   };
 
-  useEffect(()=>{
-    getComments()
-  },[])
+  const handleEdit=()=>{
+    setEdit(true)
+  }
+  useEffect(() => {
+    //getComments()
+  }, []);
   return (
     <WidgetWrapper m="2rem 0">
-      <Author
-        authorId={authorId}
-        authorName={userName}
-        authorPic={userPicturePath}
-        createdAt={createdAt}
-      />
+      <Box display="flex" justifyContent="space-between">
+        <Author
+          authorId={authorId}
+          authorName={userName}
+          authorPic={userPicturePath}
+          createdAt={createdAt}
+        />
+        {
+          authorId==loggedInUserId &&(
+            <Box m="1rem 0">
+          <Tooltip title="Edit Post">
+            <IconButton onClick={handleEdit}>
+              <EditOutlined />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Delete Post">
+            <IconButton>
+              <DeleteOutline />
+            </IconButton>
+          </Tooltip>
+        </Box>
+          )
+        }
+        
+        <Popover
+          open={edit}
+          anchorReference="anchorPosition"
+          anchorPosition={{ top: 150, left: 350 }}
+        >
+          <EditPostWidget setClose={setEdit} text={description} content={content} />
+        </Popover>
+      </Box>
       <Typography color={main} sx={{ mt: "1rem" }}>
         {description}
       </Typography>
@@ -99,7 +144,7 @@ const PostWidget = ({
           height="auto"
           alt="post"
           style={{ borderRadius: "0.75rem", marginTop: "0.75rem" }}
-          src={basePath + content}
+          src={content}
         />
       )}
       <FlexBetween mt="0.25rem">
@@ -117,21 +162,24 @@ const PostWidget = ({
 
           <FlexBetween gap="0.3rem">
             <IconButton onClick={() => patchLike(0)}>
-            {isDownVoted?(
-              <ThumbDownOutlined sx={{color:primary}}/>
-            ):(
-              <ThumbDownOutlined/>
-            )}
-              
+              {isDownVoted ? (
+                <ThumbDownOutlined sx={{ color: primary }} />
+              ) : (
+                <ThumbDownOutlined />
+              )}
             </IconButton>
             <Typography>{downVote}</Typography>
           </FlexBetween>
 
           <FlexBetween gap="0.3rem">
-            <IconButton onClick={() => {setIsComments(!isComments)}}>
+            <IconButton
+              onClick={() => {
+                setIsComments(!isComments);
+              }}
+            >
               <ChatBubbleOutlineOutlined />
             </IconButton>
-            <Typography>{comments.length||0}</Typography>
+            <Typography>{comments.length || 0}</Typography>
           </FlexBetween>
         </FlexBetween>
 
@@ -140,24 +188,27 @@ const PostWidget = ({
         </IconButton>
       </FlexBetween>
       {isComments && (
-          <Box mt="0.5rem">
-            {
-              comments.map((comment) => (
-              <Box key={comment._id}>
-                <Divider />
-                  <Comment 
-                    authorName={comment.userName}
-                    authorPic={comment.userPic}
-                    authorId={comment.userId}
-                    createdAt={comment.createdAt}
-                    message={comment.comment}
-                  />
-              </Box>
-            ))}
-            <Divider />
-            <AddComment postId={postId} commentUpdater={setComments} Comments={comments}/>
-          </Box>
-        )}
+        <Box mt="0.5rem">
+          {comments.map((comment) => (
+            <Box key={comment._id}>
+              <Divider />
+              <Comment
+                authorName={comment.userName}
+                authorPic={comment.userPic}
+                authorId={comment.userId}
+                createdAt={comment.createdAt}
+                message={comment.comment}
+              />
+            </Box>
+          ))}
+          <Divider />
+          <AddComment
+            postId={postId}
+            commentUpdater={setComments}
+            Comments={comments}
+          />
+        </Box>
+      )}
     </WidgetWrapper>
   );
 };

@@ -6,6 +6,7 @@ import UserWidget from "../widgets/UserWidget";
 import CreatePostWidget from '../widgets/CreatePostWidget';
 import PostsWidget from '../widgets/PostsWidget';
 import SortWidget from '../widgets/SortWidget';
+import PageWidget from '../widgets/PageWidget';
 
 function HomePage() {
   const isNonMobileScreens = useMediaQuery("(min-width:1000px)");
@@ -27,6 +28,7 @@ function HomePage() {
           mt={isNonMobileScreens ? undefined : "2rem"} >
           <CreatePostWidget/>
           <PostsWidget/>
+          <PageWidget/>
           
       </Box>
       <Box flexBasis={isNonMobileScreens ? "30%" : undefined}>

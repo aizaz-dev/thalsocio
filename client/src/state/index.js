@@ -4,6 +4,10 @@ const initialState={
     mode:"light",
     user:JSON.parse(localStorage.getItem('user')),
     token:localStorage.getItem('jwt'),
+    page:1,
+    view:'list',
+    trend:'+',
+    sort:'time',
     posts:[]
 }
 
@@ -21,6 +25,7 @@ export const authSlice=createSlice({
         setLogout:(state)=>{
             state.user=null
             state.token=null
+            localStorage.clear()
         },
         setPosts:(state,action)=>{
             state.posts=action.payload.posts
@@ -44,9 +49,21 @@ export const authSlice=createSlice({
                 }
                 state.posts=updatedPosts
             })
-        }
+        },
+        setPage:(state,action)=>{
+            state.page=action.payload.page
+        },
+        setView:(state,action)=>{
+            state.view=action.payload.view
+        },
+        setTrend:(state,action)=>{
+            state.trend=action.payload.trend
+        },
+        setSort:(state,action)=>{
+            state.sort=action.payload.sort
+        },
     }
 })
 
-export const {setMode,setLogin,setLogout,setPosts,setPost,setComment}=authSlice.actions;
+export const {setMode,setLogin,setLogout,setPosts,setPost,setComment,setPage,setView,setTrend,setSort}=authSlice.actions;
 export default authSlice.reducer;

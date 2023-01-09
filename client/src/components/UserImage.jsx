@@ -1,11 +1,10 @@
 import { Box } from "@mui/material";
+import { imgPath } from "../helpers/functions";
 
 const UserImage = ({ image, size = "190px" }) => {
-  const basePath='http://127.0.0.1:3001/'
-  let img=basePath+'assets/user/default.webp'
-  if(image){
-     img=basePath+image}
-  console.log(image)
+    const img=imgPath(image,'profile')
+  
+
   return (
     <Box width={size} height={size}>
       <img

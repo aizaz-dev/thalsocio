@@ -1,102 +1,278 @@
-const mongoose=require('mongoose')
-const Story=require('../models/story');
-const {errorHandler}=require('../helpers/errorHandler')
-const {countVotesStory,userVoteStoryStatus}=require('./vote')
-const {userCount}=require('./user')
+const mongoose = require("mongoose");
+const Story = require("../models/story");
+const { errorHandler } = require("../helpers/errorHandler");
+const { countVotesStory, userVoteStoryStatus } = require("./vote");
+const { userCount } = require("./user");
 
-exports.storyById=async (req,res,next)=>{
-   
-
-
-        next()
-    // console.log(id)
-    //  Story.findById(id)
-    //      .then((story)=>{
-    //          //console.log(story)
-    //          req.story=story;
-    //          next();
-    //      }).catch((err)=>{
-    //          console.log(err);
-    //          res.status(400).json({error:"story not found"})
-    //      }) 
- }
-
-exports.readSingle=async(req,res)=>{
-    let storyidToSearch = mongoose.Types.ObjectId(req.params.storyId)
-    let useridToSearch = mongoose.Types.ObjectId(req.params.userId)
-        const story=await Story.aggregate([
-            {$match:{_id:storyidToSearch}},
-            {$lookup:{
-            from:'users',
-            localField:'userId',
-            foreignField:'_id',
-            as:'User'}},
-            {
-                $unwind:'$User'
-            },
-            {$lookup:{
-                from:'votes',
-                let:{idd:"$_id"},
-                pipeline:[{$match:{
-                    $expr:{
-                        $eq:["storyId","$$idd"]
-                    }
-                }}],
-                as:'Vote'
-            }},
-            {
-                $unwind:{
-                    path:'$Vote',
-                    preserveNullAndEmptyArrays:true
-                }
-            },
-    
-            {
-                    $addFields:{
-                        'userName':'$User.name',
-                        'userPic':'$User.pic',
-                        'userId':'$User._id',
-                         'vote':'$Vote.value',
-                    }
-            },
-            {
-                $project:{
-                _id: 1,
-                message: 1,
-                content: 1,
-                tags: 1,
-                upVote: 1,
-                downVote: 1,
-                createdAt: 1,
-                updatedAt: 1,
-                userName:1,
-                userPic:1,
-                userId:1,
-                vote:{$ifNull:["$vote",'-1']},
-    
-                }
-            },{
-                $sort:{createdAt:-1}
-            } 
-            ]) 
-    return res.json(story)
+const sortObject=(sortBy)=>{
+  console.log(sortBy)
+    switch(sortBy){
+        case' time':
+            return {createdAt:1};
+            break;
+        case ' upvote':
+            return {upVote:1};
+            break;
+        case ' downvote':
+            return {downVote:1};
+            break;
+        case'-time':
+            return {createdAt:-1};
+            break;
+        case '-upvote':
+            return {upVote:-1};
+            break;
+        case '-downvote':
+            return {downVote:-1};
+            break;
+        default:
+            return {_id:1}
+    }
 }
 
-exports.create=async (req,res)=>{
-    console.log(req.file)
-    const tags=req.body.tags?req.body.tags.split('#'):['noTag']
-    const path=req.file?req.file.path.replace(/\\/g, '/'):""
-    console.log(path)
-    const userId=req.profile._id
-    try {
-        const story = await Story.create({...req.body,content:path,userId:userId,tags:tags}); 
-        res.status(200).json(story);
-      } catch (err) {
-        console.log(err)
-        //res.status(400).json({ error: err });
-        res.status(400).json({ error: errorHandler(err) });
-      }
-}
+exports.storyById = async (req, res, next) => {
+  next();
+
+};
+
+exports.readSingle = async (req, res) => {
+  let storyidToSearch = mongoose.Types.ObjectId(req.params.storyId);
+  let useridToSearch = mongoose.Types.ObjectId(req.params.userId);
+  const story = await Story.aggregate([
+    { $match: { _id: storyidToSearch } },
+    {
+      $lookup: {
+        from: "users",
+        localField: "userId",
+        foreignField: "_id",
+        as: "User",
+      },
+    },
+    {
+      $unwind: "$User",
+    },
+    {
+      $lookup: {
+        from: "votes",
+        let: { idd: "$_id" },
+        pipeline: [
+          {
+            $match: {
+              $expr: {
+                $eq: ["storyId", "$$idd"],
+              },
+            },
+          },
+        ],
+        as: "Vote",
+      },
+    },
+    {
+      $unwind: {
+        path: "$Vote",
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+
+    {
+      $addFields: {
+        userName: "$User.name",
+        userPic: "$User.pic",
+        userId: "$User._id",
+        vote: "$Vote.value",
+      },
+    },
+    {
+      $project: {
+        _id: 1,
+        message: 1,
+        content: 1,
+        tags: 1,
+        upVote: 1,
+        downVote: 1,
+        createdAt: 1,
+        updatedAt: 1,
+        userName: 1,
+        userPic: 1,
+        userId: 1,
+        vote: { $ifNull: ["$vote", "-1"] },
+      },
+    },
+    {
+      $sort: { createdAt: -1 },
+    },
+  ]);
+  return res.json(story);
+};
+
+exports.create = async (req, res) => {
+  console.log(req.body);
+  console.log(req.profile);
+  const tags = req.body.tags ? req.body.tags.split("#") : ["noTag"];
+  //const path=req.file?req.file.path.replace(/\\/g, '/'):""
+  const path = req.body.piclink;
+  const userId = req.profile._id;
+  try {
+    const story = await Story.create({
+      ...req.body,
+      content: path,
+      userId: userId,
+      tags: tags,
+    });
+    res.status(200).json(story);
+  } catch (err) {
+    console.log(err);
+    //res.status(400).json({ error: err });
+    res.status(400).json({ error: errorHandler(err) });
+  }
+};
+
+exports.allStories = async (req, res) => {
+    const {page,sortby}=req.query
+    const limit=50;
+    console.log(req.query)
+    const sort=sortObject(sortby)
+    console.log(sort)
+
+  const story = await Story.aggregate([
+    {$sort:sort},
+    {$limit:limit},
+    {
+      $lookup: {
+        from: "users",
+        localField: "userId",
+        foreignField: "_id",
+        as: "User",
+      },
+    },
+    {
+      $unwind: "$User",
+    },
+    {
+      $lookup: {
+        from: "votes",
+        let: { idd: "$_id" },
+        pipeline: [
+          {
+            $match: {
+              $expr: {
+                $eq: ["storyId", "$$idd"],
+              },
+            },
+          },
+        ],
+        as: "Vote",
+      },
+    },
+    {
+      $unwind: {
+        path: "$Vote",
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+
+    {
+      $addFields: {
+        userName: "$User.name",
+        userPic: "$User.pic",
+        userId: "$User._id",
+        vote: "$Vote.value",
+      },
+    }, 
+    {
+      $project: {
+        _id: 1,
+        message: 1,
+        content: 1,
+        tags: 1,
+        upVote: 1,
+        downVote: 1,
+        createdAt: 1,
+        updatedAt: 1,
+        userName: 1,
+        userPic: 1,
+        userId: 1,
+        vote: { $ifNull: ["$vote", "-1"] },
+      },
+    },
+
+  ]);
+  console.log(typeof(story))
+  return res.json(story);
+};
+exports.storyByCreator = async (req, res) => {
+  let useridToSearch = mongoose.Types.ObjectId(req.params.userId);
+  const {page,sortby}=req.query
+  const limit=50;
+  const sort=sortObject(sortby) 
+  console.log(sort)
+  const story = await Story.aggregate([
+    { $match: { userId: useridToSearch } },
+    {$sort:sort},
+    {$limit:limit},
+    {
+      $lookup: {
+        from: "users",
+        localField: "userId",
+        foreignField: "_id",
+        as: "User",
+      },
+    },
+    {
+      $unwind: "$User",
+    },
+    {
+      $lookup: {
+        from: "votes",
+        let: { idd: "$_id" },
+        pipeline: [
+          {
+            $match: {
+              $expr: {
+                $eq: ["storyId", "$$idd"],
+              },
+            },
+          },
+        ],
+        as: "Vote",
+      },
+    },
+    {
+      $unwind: {
+        path: "$Vote",
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+
+    {
+      $addFields: {
+        userName: "$User.name",
+        userPic: "$User.pic",
+        userId: "$User._id",
+        vote: "$Vote.value",
+      },
+    },
+    {
+      $project: {
+        _id: 1,
+        message: 1,
+        content: 1,
+        tags: 1,
+        upVote: 1,
+        downVote: 1,
+        createdAt: 1,
+        updatedAt: 1,
+        userName: 1,
+        userPic: 1,
+        userId: 1,
+        vote: { $ifNull: ["$vote", "-1"] },
+      },
+    },
+  ]);
+  return res.json(story);
+};
+
+
 /*
 exports.updateStory=(req,res)=>{
     const form=new formidable.IncomingForm();

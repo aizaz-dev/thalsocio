@@ -30,6 +30,7 @@ exports.signUp = async (req, res) => {
        .json({ error: "User Name already in use. Please choose a uniue username" });
    }
    const path = req.file?req.file.path.replace(/\\/g, '/') : "";
+   //const path=req.body.piclink
 
   try {
     const user = await User.signup({...req.body,pic:path}); 

@@ -5,7 +5,7 @@ const {upload}=require('../helpers/filehandler')
 const router=express.Router();
 
 //Signup routes
-router.post('/signup',upload.single('pic'),userSignupValidation,signUp)
+router.post('/signup',upload.single('pic'),userSignupValidation,signUp)//
 
 //login route
 router.post('/signin',signIn)

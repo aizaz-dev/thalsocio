@@ -19,7 +19,7 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import FlexBetween from "../../components/FlexBetween";
-import Dropzone from "react-dropzone";
+import Dropzonee from "../../components/Dropzonee";
 import UserImage from "../../components/UserImage";
 import WidgetWrapper from "../../components/WidgetWraper";
 import { useState } from "react";
@@ -37,6 +37,8 @@ function CreatePostWidget() {
   const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
   const mediumMain = palette.neutral.mediumMain;
   const medium = palette.neutral.medium;
+
+  const page=useSelector(state=>state.page)
 
   const handlePost = async () => {
     const formData = new FormData();
@@ -74,48 +76,7 @@ function CreatePostWidget() {
         />
       </FlexBetween>
       {isImage && (
-        <Box
-          border={`1px solid ${medium}`}
-          borderRadius="5px"
-          mt="1rem"
-          p="1rem"
-        >
-          <Dropzone
-            acceptedFiles=".jpg,.jpeg,.png"
-            multiple={false}
-            onDrop={(acceptedFiles) => setImage(acceptedFiles[0])}
-          >
-            {({ getRootProps, getInputProps }) => (
-              <FlexBetween>
-                <Box
-                  {...getRootProps()}
-                  border={`2px dashed ${palette.primary.main}`}
-                  p="1rem"
-                  width="100%"
-                  sx={{ "&:hover": { cursor: "pointer" } }}
-                >
-                  <input {...getInputProps()} />
-                  {!image ? (
-                    <p>Add Image Here</p>
-                  ) : (
-                    <FlexBetween>
-                      <Typography>{image.name}</Typography>
-                      <EditOutlined />
-                    </FlexBetween>
-                  )}
-                </Box>
-                {image && (
-                  <IconButton
-                    onClick={() => setImage(null)}
-                    sx={{ width: "15%" }}
-                  >
-                    <DeleteOutlined />
-                  </IconButton>
-                )}
-              </FlexBetween>
-            )}
-          </Dropzone>
-        </Box>
+        <Dropzonee image={image} setImage={setImage}/>
       )}
 
       <Divider sx={{ margin: "1.25rem 0" }} />

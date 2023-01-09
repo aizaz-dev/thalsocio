@@ -50,10 +50,7 @@ const Author = ({ authorName,authorPic,authorId,createdAt }) => {
           <Typography sx={{ color: medium }}>{time}</Typography>
         </Box>
       </FlexBetween>
-      <IconButton>
-        <MoreVertOutlinedIcon/>
-        {/* Here I'll add edit and delete post */}
-      </IconButton>
+
     </FlexBetween>
   );
 };

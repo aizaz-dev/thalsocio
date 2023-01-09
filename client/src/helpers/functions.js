@@ -1,3 +1,11 @@
+export const imgPath=(path,type)=>{
+  const basePath = "http://127.0.0.1:3001/";
+  if(!path){
+    return type=='profile'?`${basePath}assets/user/default.webp`:''
+  }
+  return path.includes("http") ? path : basePath + path;
+}
+
 export const timeSince=(date)=> {
 
     var seconds = Math.floor((new Date() - new Date(date)) / 1000);
