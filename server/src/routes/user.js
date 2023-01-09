@@ -20,10 +20,10 @@ router.get('/secret/:userId',requireSignin,isAuth,(req,res)=>{
    })
 
 });
+router.get("/user/leaderboard",requireSignin,leaderboard)
 router.get("/user/:userId",requireSignin,isAuth,read);
 router.put("/user/profilePic/:userId",requireSignin,isAuth,upload.single('pic'),updatePic)
 router.put("/user/:userId",requireSignin,isAuth,update);
-router.get("/leaderboard",requireSignin,leaderboard)
 router.param("userId",userById);
 
 module.exports=router;   

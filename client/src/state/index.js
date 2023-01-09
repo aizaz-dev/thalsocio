@@ -8,7 +8,8 @@ const initialState={
     view:'list',
     trend:'+',
     sort:'time',
-    posts:[]
+    posts:[],
+    users:[]
 }
 
 export const authSlice=createSlice({
@@ -40,6 +41,17 @@ export const authSlice=createSlice({
                 state.posts=updatedPosts
             })
         },
+        deletePost:(state,action)=>{
+            const updatedPosts=state.posts.map((post)=>{
+                if(post._id!=action.payload.post_id){
+                    return post
+                }
+            })
+            state.posts=updatedPosts
+        },
+        setUsers:(state,action)=>{
+            state.users=action.payload.users
+        },
         setComment:(state,action)=>{
             const updatedPosts=state.posts.map((post)=>{
                 if(post._id===action.payload.post_id){
@@ -65,5 +77,5 @@ export const authSlice=createSlice({
     }
 })
 
-export const {setMode,setLogin,setLogout,setPosts,setPost,setComment,setPage,setView,setTrend,setSort}=authSlice.actions;
+export const {setMode,setLogin,setLogout,setPosts,setPost,deletePost,setUsers,setComment,setPage,setView,setTrend,setSort}=authSlice.actions;
 export default authSlice.reducer;

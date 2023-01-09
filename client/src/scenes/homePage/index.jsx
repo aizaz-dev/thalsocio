@@ -20,7 +20,7 @@ function HomePage() {
         display={isNonMobileScreens ? "flex" : "block"}
         gap="0.5rem"
         justifyContent="space-between"
-      >
+      > 
       <Box flexBasis={isNonMobileScreens ? "15%" : undefined} >
           <SortWidget/>
       </Box>

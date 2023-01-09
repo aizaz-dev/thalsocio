@@ -22,9 +22,10 @@ import AddComment from "../../components/AddComment";
 import WidgetWrapper from "../../components/WidgetWraper";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setPost } from "../../state";
+import { setPost,deletePost } from "../../state";
 import EditPostWidget from "./EditPostWidget";
 import { imgPath } from "../../helpers/functions"
+import { deleteStory } from "../../helpers/api";
 
 const PostWidget = ({
   postId,
@@ -98,6 +99,12 @@ const PostWidget = ({
   const handleEdit=()=>{
     setEdit(true)
   }
+
+  const handleDelete = async ()=>{
+        const res=await deleteStory(postId,authorId)
+        dispatch(deletePost({post_id:postId}))
+  }
+
   useEffect(() => {
     //getComments()
   }, []);
@@ -119,7 +126,7 @@ const PostWidget = ({
             </IconButton>
           </Tooltip>
           <Tooltip title="Delete Post">
-            <IconButton>
+            <IconButton onClick={handleDelete}>
               <DeleteOutline />
             </IconButton>
           </Tooltip>

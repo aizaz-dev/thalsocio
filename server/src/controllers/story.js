@@ -269,8 +269,26 @@ exports.storyByCreator = async (req, res) => {
       },
     },
   ]);
-  return res.json(story);
+
+  return res.status(200).json(story);
 };
+
+exports.deleteStory=async (req,res)=>{
+  let storyidToDelete = mongoose.Types.ObjectId(req.params.storyId);
+  try{
+    const response=await Story.deleteOne({_id:storyidToDelete})
+    return res.status(200).json({msg:"story deleted successfuly."})
+  }catch(err){
+    console.log(err)
+    return res.status(400).json({
+      error:err
+  })
+  }
+  
+
+          
+  
+}
 
 
 /*
@@ -314,17 +332,6 @@ exports.updateStory=(req,res)=>{
     })
 }
 
-exports.deleteStory=async (req,res)=>{
-    let story=req.story;
-    story.remove()
-        .then(()=>{
-            return res.status(200).json({msg:"story deleted successfuly."})
-        }).catch(err=>{
-            return res.status(400).json({
-                error:errorHandler(err)
-            })
-        })
-}
 
 
 

@@ -1,4 +1,5 @@
 export const imgPath=(path,type)=>{
+  path=''
   const basePath = "http://127.0.0.1:3001/";
   if(!path){
     return type=='profile'?`${basePath}assets/user/default.webp`:''

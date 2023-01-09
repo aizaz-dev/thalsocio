@@ -36,7 +36,7 @@ app.use('/api',voteRoutes)
 app.use('/api',commentRoutes)
 // app.use('/api',productRoutes)
 app.get('*', function(req, res){
-    res.send('what???', 404);
+    res.json('what???', 404);
   });
 
 //Database 

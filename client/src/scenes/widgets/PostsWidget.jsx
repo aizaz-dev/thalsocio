@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Box } from "@mui/material";
 import { setPosts } from "../../state";
 import PostWidget from "./PostWidget";
+import { fetchStoriesByCreator } from "../../helpers/api";
 
 const PostsWidget = ({ userId, isProfile = false, pageType }) => {
   const dispatch = useDispatch();
@@ -23,19 +24,11 @@ const cardWidth=pageType=='trending'?'20rem':'auto'
       }
     );
     const data = await response.json();
-    console.log(data[0])
     dispatch(setPosts({ posts: data }));
   };
 
   const getUserPosts = async () => {
-    const response = await fetch(
-      `http://localhost:3001/api/story/${userId}?page=${page}&sortby=${trend}${sort}`,
-      {
-        method: "GET",
-        headers: { Authorization: `Bearer ${token}` },
-      }
-    );
-    const data = await response.json();
+    const {data} = await fetchStoriesByCreator(userId,page,trend,sort)
     dispatch(setPosts({ posts: data }));
   };
 
@@ -64,9 +57,9 @@ const cardWidth=pageType=='trending'?'20rem':'auto'
           userId,
           vote,
         }) => (
-          <Box maxWidth={cardWidth}>
+          <Box key={_id} maxWidth={cardWidth}>
           <PostWidget
-            key={_id}
+            
             postId={_id}
             authorId={userId}
             userName={userName}

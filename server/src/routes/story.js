@@ -8,7 +8,7 @@ const { create,
         readSingle,
         storyByCreator,
         allStories,
-        // deletestory,
+        deleteStory,
         // updatestory,
         // list,
         // listRelated, 
@@ -35,7 +35,7 @@ router.post("/story/create/:userId", requireSignin,upload.single('content'),isAu
 //Edit Story
 // router.put("/story/:storyId/:userId", requireSignin,isAuth,updatestory)
 //Delete Story
-// router.delete("/story/:storyId/:userId", requireSignin,isAuth,deletestory)
+ router.delete("/story/:storyId/:userId", requireSignin,isAuth,deleteStory)
 //Get Stories for timeline most recent with pagination
 router.get("/story",requireSignin,allStories)
 //Get Stories for User timelines with pagination

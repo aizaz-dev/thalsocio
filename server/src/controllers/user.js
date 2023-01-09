@@ -1,4 +1,5 @@
 const User = require("../Models/user");
+const Story = require("../Models/story"); 
 const multer = require("multer");
 
 exports.userById = async (req, res, next, id) => {
@@ -84,4 +85,43 @@ exports.updatePic = (req, res) => {
 
 exports.userCount=()=>{
   return User.countDocuments({})
+}
+
+exports.leaderboard=async(req,res)=>{
+  const topPerformer=await Story.aggregate([
+    {$group:{
+      _id:'$userId',
+      count:{$count:{}},
+      upVote:{$sum:'$upVote'},
+      downVote:{$sum:'$downVote'}
+    }},
+    {
+      $lookup: {
+        from: "users",
+        localField: "_id",
+        foreignField: "_id",
+        as: "User",
+      },
+    },
+    {
+      $unwind: "$User",
+    },
+    {
+      $addFields:{
+        userName: "$User.name",
+        userPic: "$User.pic",
+      }
+    },
+    {$project:{
+      _id:1,
+      count:1,
+      upVote:1,
+      downVote:1,
+      userName:1,
+      userPic:1
+    }},{
+      $sort:{upVote:-1}
+    }
+  ])
+  res.status(200).json(topPerformer)
 }
