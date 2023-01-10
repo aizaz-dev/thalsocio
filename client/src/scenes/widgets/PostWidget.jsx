@@ -39,7 +39,10 @@ const PostWidget = ({
   downVote,
   vote,
   createdAt,
+  onDelete,
+  delState
 }) => {
+  const [isDeleted,setDeleted]=useState(false)
   const [isComments, setIsComments] = useState(false);
   const [comments, setComments] = useState([]);
   const [edit, setEdit] = useState(false);
@@ -102,7 +105,9 @@ const PostWidget = ({
 
   const handleDelete = async ()=>{
         const res=await deleteStory(postId,authorId)
-        dispatch(deletePost({post_id:postId}))
+        onDelete(!delState)
+        setDeleted(true)
+        //dispatch(deletePost({post_id:postId}))
   }
 
   useEffect(() => {
@@ -110,6 +115,10 @@ const PostWidget = ({
   }, []);
   return (
     <WidgetWrapper m="2rem 0">
+    {isDeleted && <Box>
+      This post is deleted.
+    </Box>}
+    {!isDeleted && (<>
       <Box display="flex" justifyContent="space-between">
         <Author
           authorId={authorId}
@@ -216,6 +225,7 @@ const PostWidget = ({
           />
         </Box>
       )}
+      </>)}
     </WidgetWrapper>
   );
 };
