@@ -1,33 +1,32 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Box, Grid, IconButton, Card } from "@mui/material";
-import { setPosts } from "../../state";
+import { setPosts} from "../../state";
 import PostWidget from "./PostWidget";
 import GridPostWidget from "./GridPostWidget";
-import { fetchStoriesByCreator } from "../../helpers/api";
+import { fetchStoriesByCreator,fetchStories } from "../../helpers/api";
 
-const PostsWidget = ({ userId, isProfile = false, pageType }) => {
+const PostsWidget = ({ userId, pageType }) => {
   const [isDeleted, setDeleted] = useState(false);
   const dispatch = useDispatch();
+  const loggedinUserId=useSelector((state)=>state.user._id)
   const posts = useSelector((state) => state.posts);
-  const token = useSelector((state) => state.token);
-  const { _id } = useSelector((state) => state.user);
   const view = useSelector((state) => state.view);
-  const sort = useSelector((state) => state.sort);
-  const trend = useSelector((state) => state.trend);
-  const page = useSelector((state) => state.page);
+  let sort = useSelector((state) => state.sort);
+  let trend = useSelector((state) => state.trend);
+  let page = useSelector((state) => state.page);
   const cardWidth = pageType == "trending" ? "20rem" : "auto";
   const getPosts = async () => {
-    const response = await fetch(
-      `http://localhost:3001/api/story?page=${page}&sortby=${trend}${sort}`,
-      {
-        method: "GET",
-        headers: { Authorization: `Bearer ${token}` },
-      }
-    );
-    const data = await response.json();
+    const body={"userId":loggedinUserId}
+    if(pageType=='trending'){
 
-    dispatch(setPosts({ posts: data }));
+      const {data} =await fetchStories( page, '+', 'upVote',body);
+      dispatch(setPosts({ posts: data }));
+    }else{
+      
+      const {data} =await fetchStories( page, trend, sort,body);
+      dispatch(setPosts({ posts: data }));
+    }
   };
 
   const getUserPosts = async () => {
@@ -36,7 +35,7 @@ const PostsWidget = ({ userId, isProfile = false, pageType }) => {
   };
 
   useEffect(() => {
-    if (isProfile) {
+    if (pageType=='profile') {
       getUserPosts();
     } else {
       getPosts();

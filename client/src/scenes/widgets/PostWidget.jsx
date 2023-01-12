@@ -14,6 +14,7 @@ import {
   Tooltip,
   Typography,
   useTheme,
+  CardMedia
 } from "@mui/material";
 import FlexBetween from "../../components/FlexBetween";
 import Author from "../../components/Author";
@@ -22,10 +23,10 @@ import AddComment from "../../components/AddComment";
 import WidgetWrapper from "../../components/WidgetWraper";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setPost,deletePost } from "../../state";
+import { setPost } from "../../state";
 import EditPostWidget from "./EditPostWidget";
 import { imgPath } from "../../helpers/functions"
-import { deleteStory } from "../../helpers/api";
+import { deleteStory,likeStory } from "../../helpers/api";
 
 const PostWidget = ({
   postId,
@@ -49,8 +50,9 @@ const PostWidget = ({
   const dispatch = useDispatch();
   const token = useSelector((state) => state.token);
   const loggedInUserId = useSelector((state) => state.user._id);
-  let isUpVoted = vote === "1"; //
-  let isDownVoted = vote === "0"; //
+  const [userVote,setVote]=useState(vote)
+  const [stateupVote,setupVote]=useState(upVote)
+  const [statedownVote,setDownVote]=useState(downVote)
   content = imgPath(content,'post')
 
 
@@ -75,27 +77,16 @@ const PostWidget = ({
   };
 
   const patchLike = async (e) => {
-    const response = await fetch(
-      `http://localhost:3001/api/vote/${loggedInUserId}`,
-      {
-        method: "PUT",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          userId: loggedInUserId,
-          storyId: postId,
-          value: e,
-        }),
-      }
-    );
-    //Have to update state
-    const updatedPost = await response.json();
-    vote = e;
-    upVote += 1;
-    isUpVoted = vote === "1"; //
-    isDownVoted = vote === "0"; //
+    setVote(e)
+    e==1 ? setupVote(upVote+1):setDownVote(downVote+1)
+    const body={
+      "userId": loggedInUserId,
+      "storyId": postId,
+      "value": e
+    }
+    const response = await likeStory(body)
+
+
     // dispatch(setPost({ post: updatedPost }));
   };
 
@@ -148,11 +139,12 @@ const PostWidget = ({
           anchorReference="anchorPosition"
           anchorPosition={{ top: 150, left: 350 }}
         >
-          <EditPostWidget setClose={setEdit} text={description} content={content} />
+          <EditPostWidget setClose={setEdit} text={description} content={content} id={postId}/>
         </Popover>
       </Box>
       <Typography color={main} sx={{ mt: "1rem" }}>
-        {description}
+   <div dangerouslySetInnerHTML={{__html: description}}/>
+        
       </Typography>
       {content && (
         <img
@@ -166,25 +158,25 @@ const PostWidget = ({
       <FlexBetween mt="0.25rem">
         <FlexBetween gap="1rem">
           <FlexBetween gap="0.3rem">
-            <IconButton onClick={() => patchLike(1)}>
-              {isUpVoted ? (
+            <IconButton disabled={userVote!='-1'} onClick={() => patchLike(1)}>
+              {userVote==1 ? (
                 <ThumbUpOutlined sx={{ color: primary }} />
               ) : (
                 <ThumbUpOutlined />
               )}
             </IconButton>
-            <Typography>{upVote}</Typography>
+            <Typography>{stateupVote}</Typography>
           </FlexBetween>
 
           <FlexBetween gap="0.3rem">
-            <IconButton onClick={() => patchLike(0)}>
-              {isDownVoted ? (
+            <IconButton disabled={userVote!='-1'} onClick={() => patchLike(0)}>
+              {userVote==0 ? (
                 <ThumbDownOutlined sx={{ color: primary }} />
               ) : (
                 <ThumbDownOutlined />
               )}
             </IconButton>
-            <Typography>{downVote}</Typography>
+            <Typography>{statedownVote}</Typography>
           </FlexBetween>
 
           <FlexBetween gap="0.3rem">

@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 import { useState } from "react";
 import {
   Box,
@@ -65,13 +65,10 @@ const Form = () => {
     }
     formData.append("picturePath", values.picture.name);
 
-    const savedUserResponse = await fetch(
-      "http://localhost:3001/api/signup",
-      {
-        method: "POST",
-        body: formData,
-      }
-    );
+    const savedUserResponse = await fetch("http://localhost:3001/api/signup", {
+      method: "POST",
+      body: formData,
+    });
     const savedUser = await savedUserResponse.json();
     onSubmitProps.resetForm();
 
@@ -89,18 +86,13 @@ const Form = () => {
     const loggedIn = await loggedInResponse.json();
     onSubmitProps.resetForm();
     if (loggedIn.user) {
-      console.log(loggedIn.user)
-      localStorage.setItem('jwt',loggedIn.token)
-      localStorage.setItem('user',JSON.stringify(loggedIn.user))
-      // dispatch(
-      //   setLogin({
-      //     user: loggedIn.user,
-      //     token: loggedIn.token,
-      //   }) 
-      // );
+      console.log(loggedIn.user);
+      localStorage.setItem("jwt", loggedIn.token);
+      localStorage.setItem("user", JSON.stringify(loggedIn.user));
+      dispatch(setLogin());
       navigate("/home");
-    }else if(loggedIn.error){
-        setError(loggedIn.error)
+    } else if (loggedIn.error) {
+      setError(loggedIn.error);
     }
   };
 

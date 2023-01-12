@@ -6,7 +6,7 @@ const initialState={
     token:localStorage.getItem('jwt'),
     page:1,
     view:'list',
-    trend:'+',
+    trend:'-',
     sort:'time',
     posts:[],
     users:[]
@@ -19,8 +19,8 @@ export const authSlice=createSlice({
         setMode:(state)=>{
             state.mode=state.mode==="light"?"dark":"light"
         },
-        setLogin:(state,action)=>{
-            state.user=localStorage.getItem('user')//action.payload.user
+        setLogin:(state)=>{
+            state.user=JSON.parse(localStorage.getItem('user'))//action.payload.user
             state.token=localStorage.getItem('jwt')//action.payload.token
         },
         setLogout:(state)=>{
@@ -31,19 +31,27 @@ export const authSlice=createSlice({
         setPosts:(state,action)=>{
             state.posts=action.payload.posts
         },
+        createPost:(state,action)=>{
+            let post=action.payload.post
+            post.userName=state.user.name;
+            post.userPic=state.user.pic;
+            post.vote='-1';
+            state.posts.unshift(post)
+        },
         setPost:(state,action)=>{
+            const {message,content}=action.payload.post
             const updatedPosts=state.posts.map((post)=>{
-                if(post._id===action.payload.post_id){
-                    return action.payload.post
+                if(post._id===action.payload.post._id){
+                    return {...post,message:message,content:content}
                 }else{
                     return post
                 }
-                state.posts=updatedPosts
-            })
+                
+            });state.posts=updatedPosts
         },
         deletePost:(state,action)=>{
             const updatedPosts=state.posts.map((post)=>{
-                if(post._id!=action.payload.post_id){
+                if(post._id!=action.payload.post._id){
                     return post
                 }
             })
@@ -77,5 +85,5 @@ export const authSlice=createSlice({
     }
 })
 
-export const {setMode,setLogin,setLogout,setPosts,setPost,deletePost,setUsers,setComment,setPage,setView,setTrend,setSort}=authSlice.actions;
+export const {setMode,setLogin,setLogout,setPosts,createPost,setPost,deletePost,setUsers,setComment,setPage,setView,setTrend,setSort}=authSlice.actions;
 export default authSlice.reducer;

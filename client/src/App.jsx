@@ -10,6 +10,7 @@ import { themeSettings } from "./theme";
 import Trending from "./scenes/trendingPage";
 import LeaderBoard from "./scenes/leaderboardPage.jsx";
 import PageNotFound from "./scenes/pageNotFound";
+import PrivateRoute from "./helpers/PrivateRoute";
 
 function App() {
   const mode = useSelector((state) => state.mode);
@@ -20,12 +21,14 @@ function App() {
         <ThemeProvider theme={theme}>
           <CssBaseline />
           <Routes>
-            <Route path="/" element={<LoginPage/>} />
-            <Route path="/home" element={<HomePage/>} />
-            <Route path="/profile/:userId" element={<ProfilePage/>} />
-            <Route path="/trending" element={<Trending/>}/>
-            <Route path="/leaderboard" element={<LeaderBoard/>} />
-            <Route path="*" element={<PageNotFound/>} />
+            <Route path="/" element={<LoginPage />} />
+            <Route path="/" element={<PrivateRoute />}>
+              <Route path="/home" element={<HomePage />} />
+              <Route path="/profile/:userId" element={<ProfilePage />} />
+              <Route path="/trending" element={<Trending />} />
+              <Route path="/leaderboard" element={<LeaderBoard />} />
+            </Route>
+            <Route path="*" element={<PageNotFound />} />
           </Routes>
         </ThemeProvider>
       </BrowserRouter>

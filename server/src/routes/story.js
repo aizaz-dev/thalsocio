@@ -9,7 +9,7 @@ const { create,
         storyByCreator,
         allStories,
         deleteStory,
-        // updatestory,
+        updateStory,
         // list,
         // listRelated, 
         // listCategories,
@@ -27,19 +27,18 @@ router.get("/story/photo/:storyId", storyPhoto)
 */
 //Params for making available in req body
 router.param("userId",userById)
-router.param("storyId",storyById)
 //Get Story by ID
-router.get("/story/:storyId/:userId",requireSignin,readSingle)
+router.get("/story/:storyId/:loggedInUserId",requireSignin,readSingle)
 //Create new story
 router.post("/story/create/:userId", requireSignin,upload.single('content'),isAuth, create); 
 //Edit Story
-// router.put("/story/:storyId/:userId", requireSignin,isAuth,updatestory)
+router.patch("/story/:storyId", requireSignin,upload.single('content'),updateStory)
 //Delete Story
  router.delete("/story/:storyId/:userId", requireSignin,isAuth,deleteStory)
 //Get Stories for timeline most recent with pagination
-router.get("/story",requireSignin,allStories)
+router.get("/story/:loggedInUserId",requireSignin,allStories)
 //Get Stories for User timelines with pagination
-router.get("/story/:userId",requireSignin,storyByCreator)
+router.get("/story/:userId/:loggedInUserId",requireSignin,storyByCreator)
 //Get Stories for User Engagement page
 //Vote a Story
 //Comment a Story

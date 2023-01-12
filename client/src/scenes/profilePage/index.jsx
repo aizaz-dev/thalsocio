@@ -28,7 +28,7 @@ function ProfilePage() {
       <Box flexBasis={isNonMobileScreens ? "42%" : undefined}
           mt={isNonMobileScreens ? undefined : "2rem"} >
           <CreatePostWidget/>
-          <PostsWidget userId={userId} isProfile={true}/>
+          <PostsWidget userId={userId} pageType='profile'/>
           <PageWidget/>
           
       </Box>

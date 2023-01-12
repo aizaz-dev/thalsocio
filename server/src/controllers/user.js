@@ -3,15 +3,14 @@ const Story = require("../Models/story");
 const multer = require("multer");
 
 exports.userById = async (req, res, next, id) => {
-if(!id){
-  res.status(400).json({error:"Invalid user id"}) 
+if(id=="undefined"){
+  return res.status(400).json({error:"Invalid user id"}) 
 }
   User.findById(id).exec((err, user) => {
     if (err || !user) {
       res.status(400).json({ error: "User not found" });
     } else {
       req.profile = user;
-      //console.log("Storing in req profile ",req.profile)
     }
     next();
   });

@@ -2,11 +2,10 @@ import React from "react";
 import {
   EditOutlined,
   DeleteOutlined,
-  AttachFileOutlined,
   GifBoxOutlined,
   ImageOutlined,
-  MicOutlined,
   MoreHorizOutlined,
+  TextFormat,
 } from "@mui/icons-material";
 import {
   Box,
@@ -17,6 +16,7 @@ import {
   Button,
   IconButton,
   useMediaQuery,
+  Tooltip,
 } from "@mui/material";
 import FlexBetween from "../../components/FlexBetween";
 import Dropzonee from "../../components/Dropzonee";
@@ -24,39 +24,37 @@ import UserImage from "../../components/UserImage";
 import WidgetWrapper from "../../components/WidgetWraper";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setPosts } from "../../state/index";
+import { createPost } from "../../state/index";
+import TextEditorWidget from "./TextEditorWidget";
+import { createStory } from "../../helpers/api";
 
 function CreatePostWidget() {
   const dispatch = useDispatch();
   const [isImage, setIsImage] = useState(false);
   const [image, setImage] = useState(null);
-  const [post, setPost] = useState("");
+  const [text, setText] = useState("");
+  const [isFormat, setIsFormat] = useState(false);
   const { palette } = useTheme();
   const { _id,pic } = useSelector((state) => state.user);
   const token = useSelector((state) => state.token);
-  const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
+  const isNonMobileScreens = useMediaQuery("(min-width: 400px)");
   const mediumMain = palette.neutral.mediumMain;
   const medium = palette.neutral.medium;
 
-  const page=useSelector(state=>state.page)
 
   const handlePost = async () => {
     const formData = new FormData();
-    formData.append("message", post);
+    formData.append("message", text);
     formData.append("tags", '#post');
     if (image) {
       formData.append("content", image);  
     }
 
-    const response = await fetch(`http://localhost:3001/api/story/create/${_id}`, {
-      method: "POST",
-      headers: { Authorization: `Bearer ${token}` },
-      body: formData,
-    });
-    const posts = await response.json();
-    dispatch(setPosts({ posts }));
+    const {data} = await createStory(formData);
+    dispatch(createPost({ post:data }));
     setImage(null);
-    setPost("");
+    setText("");
+    setIsFormat(!isFormat)
   };
 
   return (
@@ -65,8 +63,9 @@ function CreatePostWidget() {
         <UserImage image={pic} size="50px" />
         <InputBase
           placeholder="What's on your mind..."
-          onChange={(e) => setPost(e.target.value)}
-          value={post}
+          onChange={(e) => setText(e.target.value)}
+          value={text}
+          multiline={true}
           sx={{
             width: "100%",
             backgroundColor: palette.neutral.light,
@@ -75,6 +74,7 @@ function CreatePostWidget() {
           }}
         />
       </FlexBetween>
+      {isFormat && <TextEditorWidget setChange={setText}/>}
       {isImage && (
         <Dropzonee image={image} setImage={setImage}/>
       )}
@@ -83,40 +83,48 @@ function CreatePostWidget() {
 
       <FlexBetween>
         <FlexBetween gap="0.25rem" onClick={() => setIsImage(!isImage)}>
+        <Tooltip title='Add Photo'>
           <ImageOutlined sx={{ color: mediumMain }} />
-          <Typography
+
+        </Tooltip>
+          {isNonMobileScreens && (<Typography
             color={mediumMain}
             sx={{ "&:hover": { cursor: "pointer", color: medium } }}
           >
             Image
-          </Typography>
+          </Typography>)}
         </FlexBetween>
 
-        {isNonMobileScreens ? (
+        
           <>
-            <FlexBetween gap="0.25rem">
-              <GifBoxOutlined sx={{ color: mediumMain }} />
-              <Typography color={mediumMain}>Clip</Typography>
+            <FlexBetween gap="0.25rem" onClick={() => setIsImage(!isImage)}>
+            <Tooltip title="Add Video">
+              <GifBoxOutlined sx={{ color: mediumMain, }} />
+              </Tooltip>
+              {isNonMobileScreens && (<Typography
+            color={mediumMain}
+            sx={{ "&:hover": { cursor: "pointer", color: medium } }}
+          >
+            Clip
+          </Typography>)}
             </FlexBetween>
 
-            <FlexBetween gap="0.25rem">
-              <AttachFileOutlined sx={{ color: mediumMain }} />
-              <Typography color={mediumMain}>Attachment</Typography>
-            </FlexBetween>
-
-            <FlexBetween gap="0.25rem">
-              <MicOutlined sx={{ color: mediumMain }} />
-              <Typography color={mediumMain}>Audio</Typography>
+            <FlexBetween gap="0.25rem" onClick={() => setIsFormat(!isFormat)}>
+            <Tooltip title="Add Rich Text">
+              <TextFormat sx={{ color: mediumMain }} />
+              </Tooltip>
+              {isNonMobileScreens && (<Typography
+            color={mediumMain}
+            sx={{ "&:hover": { cursor: "pointer", color: medium } }}
+          >
+            Format
+          </Typography>)}
             </FlexBetween>
           </>
-        ) : (
-          <FlexBetween gap="0.25rem">
-            <MoreHorizOutlined sx={{ color: mediumMain }} />
-          </FlexBetween>
-        )}
+ 
 
         <Button
-          disabled={!post}
+          disabled={!text && !image}
           onClick={handlePost}
           sx={{
             color: palette.background.alt,
@@ -127,6 +135,9 @@ function CreatePostWidget() {
           POST
         </Button>
       </FlexBetween>
+
+    
+     
     </WidgetWrapper>
   );
 }

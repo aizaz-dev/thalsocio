@@ -1,16 +1,20 @@
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 import { Box, InputBase, IconButton, useTheme,Typography,Button } from "@mui/material";
 import { HighlightOffRounded,EditOutlined,DeleteOutlined} from "@mui/icons-material";
 import WidgetWraper from "../../components/WidgetWraper";
 
 import Dropzonee from "../../components/Dropzonee";
+import TextEditorWidget from "./TextEditorWidget";
+import { updateStory } from "../../helpers/api";
+import { setPost } from "../../state";
 
-
-function EditPostWidget({ setClose, text, content }) {
-  const [post, setPost] = useState(text);
+function EditPostWidget({ setClose, text, content,id }) {
+  const [updatedPost, setUpdatedPost] = useState(text);
   const [img, setImg] = useState(content);
   const [image, setImage] = useState(null);
   const [isUpdatePic,setIsUpdatePic]=useState(false)
+  const dispatch=useDispatch();
   const { palette } = useTheme();
   const mediumMain = palette.neutral.mediumMain;
   const medium = palette.neutral.medium;
@@ -24,22 +28,19 @@ function EditPostWidget({ setClose, text, content }) {
 
   const handlePost = async () => {
     const formData = new FormData();
-    formData.append("message", post);
+    formData.append("message", updatedPost);
     formData.append("tags", '#post');
     if (image) {
       formData.append("content", image);  
     }
 
-    const response = await fetch(`http://localhost:3001/api/story/create/${_id}`, {
-      method: "POST",
-      headers: { Authorization: `Bearer ${token}` },
-      body: formData,
-    });
-    const posts = await response.json();
-    //dispatch(setPosts({ posts }));
+
+    const {data}= await updateStory(id,formData)
+    dispatch(setPost({ post:data }));
     setImage(null);
     setClose(false)
-    setPost("");
+    setUpdatedPost("");
+   
   };
 
   return (
@@ -50,19 +51,8 @@ function EditPostWidget({ setClose, text, content }) {
         </IconButton>
       </Box>
       <Box sx={{ width: "30rem" }}>
-        <InputBase
-          placeholder={text}
-          onChange={(e) => setPost(e.target.value)}
-          value={post}
-          multiline={true}
-          sx={{
-            width: "100%",
-            backgroundColor: palette.neutral.light,
-            borderRadius: "2rem",
-            padding: "1rem 2rem",
-            margin: "dense",
-          }}
-        />
+
+        <TextEditorWidget content={updatedPost} setChange={setUpdatedPost}/>
         {img && (
             <Box>
             <Box display='flex' flexDirection='row-reverse' m='2rem 0 -3.5rem'>
