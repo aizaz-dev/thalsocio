@@ -17,14 +17,9 @@ if(id=="undefined"){
 };
  
 exports.read = (req, res) => {
-try{
   req.profile.hashed_password = undefined;
   req.profile.salt = undefined;
   return res.status(200).json(req.profile);
-}catch(err){
-  
-}
-
 
 };
 

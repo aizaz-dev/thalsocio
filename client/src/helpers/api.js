@@ -1,9 +1,10 @@
 import axios from "axios";
+import {useSelector} from 'react-redux'
 
 const API = axios.create({ baseURL: "http://localhost:3001" });
-if(localStorage.getItem("user")){
-
-  const loggedInUserId = JSON.parse(localStorage.getItem("user"))._id;
+const getLoggedInUser=()=>{
+   return JSON.parse(localStorage.getItem("user"))._id;
+  //  const loggedInUserId = useSelector(state=>state.user._id);
 }
 
 API.interceptors.request.use((req) => {
@@ -22,8 +23,6 @@ export const fetchStoriesBySearch = (searchQuery) =>
     }`
   );
 
-export const comment = (value, id) =>
-  API.post(`/Story/${id}/commentStory`, { value });
 
 
 export const signIn = (formData) => API.post("/user/signin", formData);
@@ -31,9 +30,9 @@ export const signUp = (formData) => API.post("/user/signup", formData);
 ///
 export const getUsers = () => API.get("/api/user/leaderboard");
 export const fetchStories = (page, trend, sort) =>
-  API.get(`/api/story/${loggedInUserId}?page=${page}&sortby=${trend}${sort}`);
+  API.get(`/api/story/${getLoggedInUser()}?page=${page}&sortby=${trend}${sort}`);
 export const fetchStoriesByCreator = (userId, page, trend, sort) =>
-  API.get(`/api/story/${userId}/${loggedInUserId}?page=${page}&sortby=${trend}${sort}`);
+  API.get(`/api/story/u/${userId}/${getLoggedInUser()}?page=${page}&sortby=${trend}${sort}`);
 export const deleteStory = (storyId, userId) =>
   API.delete(`/api/Story/${storyId}/${userId}`);
 export const likeStory = (body) =>
@@ -42,7 +41,13 @@ export const likeStory = (body) =>
 
     body
   );
-  export const createStory = (newStory) => API.post(`/api/story/create/${loggedInUserId}`, newStory);
+  export const createStory = (newStory) => API.post(`/api/story/create/${getLoggedInUser()}`, newStory);
 
   export const updateStory = (id, updatedStory) =>
   API.patch(`/api/story/${id}`, updatedStory);
+  export const addComment = (newComment) =>
+  API.post(`/api/comment/`, newComment,{
+    headers: {
+    'Content-Type': 'text/plain'
+    }
+  });

@@ -6,10 +6,11 @@ exports.addVote=async (req,res)=>{
     const filter={storyId:storyId,userId:userId}
     const update={value:value} 
     const alreadyVoted= await Vote.countDocuments(filter)
+    console.log("here")
     //check if user and story exist
     if(alreadyVoted){
         try{
-            return res.status(400).json({error:'alreadyVoted'})
+            return res.status(200).json({msg:'alreadyVoted'})
         //     const vote=await Vote.findOneAndUpdate(filter,update)
         //         if(req.body.value=='0'){
         //             const story=await Story.findOneAndUpdate({_id:req.body.storyId},{$inc:{downVote:1}}) 
@@ -20,7 +21,7 @@ exports.addVote=async (req,res)=>{
         //         res.status(200).json({msg:"Updated"})
            
         }catch{
-            res.status(400).json({err:"Unable to add vote"})
+            return res.status(400).json({error:"Unable to add vote"})
         }
     }else{
         try{
@@ -30,10 +31,10 @@ exports.addVote=async (req,res)=>{
                 }else{
                     const story=await Story.findOneAndUpdate({_id:req.body.storyId},{$inc:{upVote:1}})
                 }
-                res.status(200).json({msg:"Added"})
+                return res.status(200).json({msg:"Added"})
             
             }catch{    
-                res.status(400).json({err:"Unable to add vote"})
+                return res.status(400).json({error:"Unable to add vote"})
         }
     }
     
@@ -71,13 +72,3 @@ exports.changeVote=(req,res)=>{
     //try some error handling
 }
 
-exports.countVotesStory=(storyId)=>{
-    const upVote=Vote.countDocuments({storyId:storyId,value:'1'})
-    const downVote=Vote.countDocuments({storyId:storyId,value:'0'})
-    return {upVote,downVote}
-}
-
-exports.userVoteStoryStatus=(storyId,userId)=>{
-    const vote= Vote.findOne({storyId:storyId,userId:userId})
-    return vote
-}  

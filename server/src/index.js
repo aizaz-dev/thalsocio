@@ -24,13 +24,19 @@ const app=express();
 //Middle ware
 app.use(morgan('dev')); 
 app.use(cors());
+// app.use("/api/*",function(req, res, next) {
+//   res.header("Access-Control-Allow-Origin", "*");
+//   res.header("Access-Control-Allow-Headers", "Cache-Control, Pragma, Origin, Authorization, Content-Type, X-Requested-With");
+//   res.header("Access-Control-Allow-Methods", "GET, PUT, POST, PATCH");
+//   return next();
+// });
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use("/assets", express.static('assets'));
 
 //Routes Middelware
 app.use('/api',authRoutes) 
- app.use('/api',userRoutes)
+app.use('/api',userRoutes)
 app.use('/api',storyRoutes)
 app.use('/api',voteRoutes)
 app.use('/api',commentRoutes)
@@ -45,8 +51,9 @@ mongoose.connect(db,{
    // useCreateIndex:true
 }).then(()=>{
     console.log("Database Connected!!!");
-    app.listen(port);
+     app.listen(port);
     console.log('Listening on port :',port); 
 })
 
 mongoose.set('strictQuery', true)
+

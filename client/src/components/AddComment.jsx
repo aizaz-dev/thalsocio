@@ -17,6 +17,7 @@ import {
 import FlexBetween from './FlexBetween';
 import UserImage from './UserImage';
 import { useSelector } from 'react-redux';
+import { addComment } from '../helpers/api';
 
   
 function AddComment({postId,commentUpdater,Comments}) {
@@ -24,30 +25,19 @@ function AddComment({postId,commentUpdater,Comments}) {
     const { _id,pic,name } = useSelector((state) => state.user);
     const token = useSelector((state) => state.token);
     const { palette } = useTheme();
-    const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
-    const mediumMain = palette.neutral.mediumMain;
-    const medium = palette.neutral.medium;
 
     const handlePost = async () => {
     
-        const response = await fetch(`http://localhost:3001/api/comment/`, {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
+          const body= JSON.stringify({
             userId: _id,
             storyId: postId,
-            comment: comment,
-          }),
-        });
-        const posts = await response.json();
-        posts.userId=_id
-        posts.userPic=pic
-        posts.userName=name
-        // dispatch(setPosts({ posts }));
-        commentUpdater([...Comments,posts])
+            comment: comment,})
+ 
+        const {data} = await addComment(body);
+        data.userId=_id
+        data.userPic=pic
+        data.userName=name;
+        commentUpdater([...Comments,data])
         console.log(posts)
         setComment("");
       };

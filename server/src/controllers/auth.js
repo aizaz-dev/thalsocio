@@ -82,11 +82,19 @@ exports.signOut = async (req, res) => {
   res.json({ message: "Signout Successful" });
 };
 
-exports.requireSignin =  expressjwt({
-  secret: process.env.JWT_SECRET,
-  algorithms: ["HS256"],
-  userProperty: "auth",
-});
+exports.requireSignin = ()=>{
+  return [
+    expressjwt({
+     secret: process.env.JWT_SECRET,
+     algorithms: ["HS256"],
+     userProperty: "auth",
+   })
+    ,function(err, req, res, next){
+            res.status(err.status).json({error:err.message});}
+  ]
+}
+    
+ 
 
 exports.isAuth = (req, res, next) => {
   let user = req.profile && req.auth && req.profile._id == req.auth._id;

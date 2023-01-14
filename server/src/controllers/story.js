@@ -1,12 +1,11 @@
 const mongoose = require("mongoose");
 const Story = require("../models/story");
 const { errorHandler } = require("../helpers/errorHandler");
-const { countVotesStory, userVoteStoryStatus } = require("./vote");
-const { userCount } = require("./user");
+
 
 const sortObject=(sortBy)=>{
   console.log(sortBy)
-    switch(sortBy){
+  switch(sortBy){
         case' time':
             return {createdAt:1};
             break;
@@ -19,18 +18,19 @@ const sortObject=(sortBy)=>{
         case'-time':
             return {createdAt:-1};
             break;
-        case '-upvote':
-            return {upVote:-1};
+            case '-upvote':
+              return {upVote:-1};
             break;
         case '-downvote':
             return {downVote:-1};
             break;
-        default:
-            return {_id:1}
-    }
+            default:
+              return {_id:1}
+            }
 }
 
-const fetchStory=async (filter={},sort={_id:1},limit=50,loggedinUserId)=>{
+
+const fetchStory=async (loggedinUserId,filter={},sort={_id:1},limit=50)=>{
   console.log(loggedinUserId)
    const story = await Story.aggregate([
     { $match: filter },
@@ -56,8 +56,8 @@ const fetchStory=async (filter={},sort={_id:1},limit=50,loggedinUserId)=>{
             $match: {
               $expr: {
                 $and:[
-                 { $eq: ["$storyId", "$$sid"]},
-                 { $eq: ["$userId", "$$uid"]},
+                  { $eq: ["$storyId", "$$sid"]},
+                  { $eq: ["$userId", "$$uid"]},
 
                 ]
               },
@@ -98,17 +98,41 @@ const fetchStory=async (filter={},sort={_id:1},limit=50,loggedinUserId)=>{
         vote: { $ifNull: ["$vote", "-1"] },
       },
     },
-
+    
   ]);
   return story
 }
+exports.validateStoryId=async (req,res)=>{
+  if(req.params.storyId==undefined){
+    res.status(400).json({error:"storyId undefined"})
+  }
+  try{
+    const storyidToSearch = mongoose.Types.ObjectId(req.params.storyId);
+    const count=await Story.countDocuments({_id:storyidToSearch})
+    if(count){
+      req.body.storyidToSearch=storyidToSearch
+      next()
+    }else{
+      res.status(400).json({error:"story not found"})
+
+    }
+  }catch(err){
+    res.status(400).json({error:"story id invalid"})
+  }
+
+}
 
 exports.readSingle = async (req, res) => {
-  let storyidToSearch = mongoose.Types.ObjectId(req.params.storyId);
+  try{
+    const storyidToSearch = mongoose.Types.ObjectId(req.params.storyId);
+    const loggedInUserId=mongoose.Types.ObjectId(req.params.loggedInUserId);
+    const filter={ _id: storyidToSearch }
+    const story=await fetchStory(loggedInUserId,filter)
+    return res.json(story);
+  }catch(err){
+    return res.status(400).json({error:err})
+  }
 
-  const filter={ _id: storyidToSearch }
-  const story=await fetchStory(filter)
-  return res.json(story);
 };
 
 exports.create = async (req, res) => {
@@ -132,37 +156,45 @@ exports.create = async (req, res) => {
   }
 };
 
-
 exports.allStories = async (req, res) => {
-    const {page,sortby}=req.query
-    const filter={}
+  try{
+    const loggedInUserId=mongoose.Types.ObjectId(req.params.loggedInUserId);
+    const {page,sortby}=req.query;
+    const filter={};
     const sort=sortObject(sortby)
     const limit=50;
-    const loggedInUserId=mongoose.Types.ObjectId(req.params.loggedInUserId)
     console.log(req.params)
-    const stories=await fetchStory(filter,sort,limit,loggedInUserId)
+    const stories=await fetchStory(loggedInUserId,filter,sort,limit);
     return res.json(stories);
+  }catch(err){
+    return res.status(400).json({error:err})
+  }
+
 };
+
 exports.storyByCreator = async (req, res) => {
-  let useridToSearch = mongoose.Types.ObjectId(req.params.userId);
-  const {page,sortby}=req.query
-  const filter={userId: useridToSearch}
-  const limit=50;
-  const sort=sortObject(sortby) 
-  const stories=await fetchStory(filter,sort,limit)
-  return res.json(stories);
+  try{
+    let useridToSearch = mongoose.Types.ObjectId(req.params.userId);
+    const loggedInUserId=mongoose.Types.ObjectId(req.params.loggedInUserId)
+    const {page,sortby}=req.query
+    const filter={userId: useridToSearch}
+    const limit=50;
+    const sort=sortObject(sortby) 
+    const stories=await fetchStory(loggedInUserId,filter,sort,limit)
+    return res.json(stories);
+  }catch(err){
+    return res.status(400).json({error:err.message})
+  }
+
 };
 
 exports.deleteStory=async (req,res)=>{
-  let storyidToDelete = mongoose.Types.ObjectId(req.params.storyId);
   try{
+    let storyidToDelete = mongoose.Types.ObjectId(req.params.storyId);
     const response=await Story.deleteOne({_id:storyidToDelete})
     return res.status(200).json({msg:"story deleted successfuly."})
   }catch(err){
-    console.log(err)
-    return res.status(400).json({
-      error:err
-  })
+    return res.status(400).json({error:err})
   }
 }
 
