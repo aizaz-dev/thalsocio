@@ -42,6 +42,14 @@ const PostsWidget = ({ userId, pageType }) => {
     }
   }, [sort, trend, page, view]);
 
+  if(!posts.length){
+    return(
+      <>
+        <h2>No Posts Available</h2>
+      </>
+    )
+  }
+
   return (
     <>
       {view == "list" &&

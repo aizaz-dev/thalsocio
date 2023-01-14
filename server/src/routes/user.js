@@ -6,10 +6,10 @@ const User=require("../models/user")
 const router=express.Router();
 
 //testing
-router.get("/user/leaderboard",requireSignin,leaderboard)
-router.get("/user/:userId",requireSignin,isAuth,read);
-router.put("/user/profilePic/:userId",requireSignin,isAuth,upload.single('pic'),updatePic)
-router.put("/user/:userId",requireSignin,isAuth,update);
+router.get("/user/leaderboard",requireSignin(),leaderboard)
+router.get("/user/:userId",requireSignin(),isAuth,read);
+router.put("/user/profilePic/:userId",requireSignin(),isAuth,upload.single('pic'),updatePic)
+router.put("/user/:userId",requireSignin(),isAuth,update);
 router.param("userId",userById);
 
 module.exports=router;   

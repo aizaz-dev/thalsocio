@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const Story = require("../models/story");
 const { errorHandler } = require("../helpers/errorHandler");
 
-
+// This method is user=d to generate sort object based on query prameters
 const sortObject=(sortBy)=>{
   console.log(sortBy)
   switch(sortBy){
@@ -28,13 +28,15 @@ const sortObject=(sortBy)=>{
               return {_id:1}
             }
 }
+//This function has actual aggregation mongose uery to fetch data from database
+const fetchStory=async (loggedinUserId,filter={},sort={_id:1},page=1)=>{
 
-
-const fetchStory=async (loggedinUserId,filter={},sort={_id:1},limit=50)=>{
-  console.log(loggedinUserId)
+  const limit=50
+  const skip=(page-1)*limit
    const story = await Story.aggregate([
     { $match: filter },
     {$sort:sort},
+    {$skip:skip},
     {$limit:limit},
     {
       $lookup: {
@@ -102,6 +104,7 @@ const fetchStory=async (loggedinUserId,filter={},sort={_id:1},limit=50)=>{
   ]);
   return story
 }
+//This function is used to validate sorry Id
 exports.validateStoryId=async (req,res)=>{
   if(req.params.storyId==undefined){
     res.status(400).json({error:"storyId undefined"})
@@ -121,7 +124,7 @@ exports.validateStoryId=async (req,res)=>{
   }
 
 }
-
+//This function will return requested story by id
 exports.readSingle = async (req, res) => {
   try{
     const storyidToSearch = mongoose.Types.ObjectId(req.params.storyId);
@@ -134,7 +137,37 @@ exports.readSingle = async (req, res) => {
   }
 
 };
+//This function will fetch all stories
+exports.allStories = async (req, res) => {
+  try{
+    const loggedInUserId=mongoose.Types.ObjectId(req.params.loggedInUserId);
+    const {page,sortby}=req.query;
+    const filter={};
+    const sort=sortObject(sortby)
+    console.log(req.params)
+    const stories=await fetchStory(loggedInUserId,filter,sort,page);
+    return res.json(stories);
+  }catch(err){
+    return res.status(400).json({error:err.message})
+  }
 
+};
+//This function will fetch all stories by creator
+exports.storyByCreator = async (req, res) => {
+  try{
+    let useridToSearch = mongoose.Types.ObjectId(req.params.userId);
+    const loggedInUserId=mongoose.Types.ObjectId(req.params.loggedInUserId)
+    const {page,sortby}=req.query
+    const filter={userId: useridToSearch}
+    const sort=sortObject(sortby) 
+    const stories=await fetchStory(loggedInUserId,filter,sort,page)
+    return res.json(stories);
+  }catch(err){
+    return res.status(400).json({error:err.message})
+  }
+
+};
+//This fuction will create a new document in db
 exports.create = async (req, res) => {
   console.log(req.body);
   const tags = req.body.tags ? req.body.tags.split("#") : ["noTag"];
@@ -152,42 +185,10 @@ exports.create = async (req, res) => {
   } catch (err) {
     console.log(err);
     //res.status(400).json({ error: err });
-    res.status(400).json({ error: errorHandler(err) });
+    res.status(400).json({ error: errorHandler(err.message) });
   }
 };
-
-exports.allStories = async (req, res) => {
-  try{
-    const loggedInUserId=mongoose.Types.ObjectId(req.params.loggedInUserId);
-    const {page,sortby}=req.query;
-    const filter={};
-    const sort=sortObject(sortby)
-    const limit=50;
-    console.log(req.params)
-    const stories=await fetchStory(loggedInUserId,filter,sort,limit);
-    return res.json(stories);
-  }catch(err){
-    return res.status(400).json({error:err})
-  }
-
-};
-
-exports.storyByCreator = async (req, res) => {
-  try{
-    let useridToSearch = mongoose.Types.ObjectId(req.params.userId);
-    const loggedInUserId=mongoose.Types.ObjectId(req.params.loggedInUserId)
-    const {page,sortby}=req.query
-    const filter={userId: useridToSearch}
-    const limit=50;
-    const sort=sortObject(sortby) 
-    const stories=await fetchStory(loggedInUserId,filter,sort,limit)
-    return res.json(stories);
-  }catch(err){
-    return res.status(400).json({error:err.message})
-  }
-
-};
-
+//This function will delete the story from db
 exports.deleteStory=async (req,res)=>{
   try{
     let storyidToDelete = mongoose.Types.ObjectId(req.params.storyId);
@@ -197,7 +198,7 @@ exports.deleteStory=async (req,res)=>{
     return res.status(400).json({error:err})
   }
 }
-
+//This function will update the story
 exports.updateStory = async (req, res) => {
   console.log(req.body);
   const tags = req.body.tags ? req.body.tags.split("#") : ["noTag"];
@@ -208,11 +209,11 @@ exports.updateStory = async (req, res) => {
     const story = await Story.findOneAndUpdate(
       {"_id":postId},
       {
-      ...req.body,
+        ...req.body,
       content: path,
       tags: tags,
     }, { returnOriginal: false });
-   console.log(story)
+    console.log(story)
     res.status(200).json(story);
   } catch (err) {
     console.log(err);
@@ -223,16 +224,12 @@ exports.updateStory = async (req, res) => {
 
 
 /*
-/*
-
-
-/*
- * list story by search
+* list story by search
  * we will implement story search in react frontend
  * we will show categories in checkbox and price range in radio buttons
  * as the user clicks on those checkbox and radio buttons
  * we will make api request and show the story to users based on what he wants
- */
+*/
 /*
 exports.listBySearch = (req, res) => {
     let order = req.body.order ? req.body.order : "desc";

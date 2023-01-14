@@ -1,27 +1,42 @@
-import React from 'react'
+import React, {useCallback} from 'react'
 import { Box, IconButton,Typography,useTheme } from "@mui/material";
 import { EditOutlined,DeleteOutlined} from "@mui/icons-material";
-import Dropzone from 'react-dropzone'
+import Dropzone,{useDropzone} from 'react-dropzone'
 import FlexBetween from './FlexBetween';
 
 
-function Dropzonee({image,setImage}) {
+function Dropzonee({image,setImage,type}) {
+  const accepteFilesFilter=type==='clip'?{
+    'video/mp4':['.mp4','.MP4']
+  }:{
+    'image/jpeg':[],
+    'image/jpg':[],
+    'image/png':[]
+  }
+  const text=type==='clip'?'Video Clip':'Image'
   const { palette } = useTheme();
   const mediumMain = palette.neutral.mediumMain;
   const medium = palette.neutral.medium;
+  
+  const onDrop = useCallback(acceptedFiles => {
+   setImage(acceptedFiles[0])
+  }, [])
+  const {getRootProps, getInputProps, isDragActive} = useDropzone({
+    onDrop,
+  accept:accepteFilesFilter})
+
+
+
   return(
+    <div {...getRootProps()}>
   <Box
           border={`1px solid ${medium}`}
           borderRadius="5px"
           mt="1rem"
           p="1rem"
         >
-          <Dropzone
-            acceptedFiles= 'image/*'
-            multiple={false}
-            onDrop={(acceptedFiles) => setImage(acceptedFiles[0])}
-          >
-            {({ getRootProps, getInputProps }) => (
+          <input {...getInputProps()} />
+            { (
               <FlexBetween>
                 <Box
                   {...getRootProps()}
@@ -32,7 +47,7 @@ function Dropzonee({image,setImage}) {
                 >
                   <input {...getInputProps()} />
                   {!image ? (
-                    <p>Add Image Here</p>
+                    <p>Add {text} Here</p>
                   ) : (
                     <FlexBetween>
                       <Typography>{image.name}</Typography>
@@ -50,8 +65,9 @@ function Dropzonee({image,setImage}) {
                 )}
               </FlexBetween>
             )}
-          </Dropzone>
+  
         </Box>
+        </div>
         )
   }
   export default Dropzonee

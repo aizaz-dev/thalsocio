@@ -37,6 +37,7 @@ import {
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
   
     if (!user) {
+      console.log('User not found')
       return null;
     }
   

@@ -25,6 +25,7 @@ function HomePage() {
           <SortWidget/>
       </Box>
       <Box flexBasis={isNonMobileScreens ? "42%" : undefined}
+      maxWidth='30rem'
           mt={isNonMobileScreens ? undefined : "2rem"}  >
           <CreatePostWidget/>
           <PostsWidget pageType='home'/>

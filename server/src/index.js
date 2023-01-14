@@ -23,13 +23,14 @@ const db=process.env.MONGO_URI;
 const app=express();
 //Middle ware
 app.use(morgan('dev')); 
-app.use(cors());
-// app.use("/api/*",function(req, res, next) {
-//   res.header("Access-Control-Allow-Origin", "*");
-//   res.header("Access-Control-Allow-Headers", "Cache-Control, Pragma, Origin, Authorization, Content-Type, X-Requested-With");
-//   res.header("Access-Control-Allow-Methods", "GET, PUT, POST, PATCH");
-//   return next();
-// });
+
+//app.use(cors());
+app.use("/api/*",function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Cache-Control, Pragma, Origin, Authorization, Content-Type, X-Requested-With");
+  res.header("Access-Control-Allow-Methods", "GET, PUT, POST, PATCH, DELETE");
+  next();
+});
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use("/assets", express.static('assets'));

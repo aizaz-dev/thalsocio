@@ -1,10 +1,17 @@
 export const imgPath=(path,type)=>{
-  //path=''
+ // path=''
   const basePath = "http://127.0.0.1:3001/";
   if(!path){
     return type=='profile'?`${basePath}assets/user/default.webp`:''
   }
   return path.includes("http") ? path : basePath + path;
+}
+export const postType=(path)=>{
+  if(path.includes('.mp4')||path.includes('.WebM')||path.includes('.OGG')){
+    return 'video'
+  }else{
+    return 'img'
+  }
 }
 
 export const timeSince=(date)=> {

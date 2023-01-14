@@ -32,11 +32,11 @@ function CreatePostWidget() {
   const dispatch = useDispatch();
   const [isImage, setIsImage] = useState(false);
   const [image, setImage] = useState(null);
+  const [type,setType]=useState('img')
   const [text, setText] = useState("");
   const [isFormat, setIsFormat] = useState(false);
   const { palette } = useTheme();
   const { _id,pic } = useSelector((state) => state.user);
-  const token = useSelector((state) => state.token);
   const isNonMobileScreens = useMediaQuery("(min-width: 400px)");
   const mediumMain = palette.neutral.mediumMain;
   const medium = palette.neutral.medium;
@@ -61,7 +61,7 @@ function CreatePostWidget() {
     <WidgetWrapper>
       <FlexBetween gap="1.5rem">
         <UserImage image={pic} size="50px" />
-        <InputBase
+        {/* <InputBase
           placeholder="What's on your mind..."
           onChange={(e) => setText(e.target.value)}
           value={text}
@@ -72,17 +72,24 @@ function CreatePostWidget() {
             borderRadius: "2rem",
             padding: "1rem 2rem",
           }}
-        />
+        /> */}
+        <Button onClick={()=>setIsFormat(!isFormat)} sx={{
+            width: "100%",
+            backgroundColor: palette.neutral.light,
+            borderRadius: "2rem",
+            padding: "1rem 2rem",
+            
+          }}>"What's on your mind..."</Button>
       </FlexBetween>
       {isFormat && <TextEditorWidget setChange={setText}/>}
       {isImage && (
-        <Dropzonee image={image} setImage={setImage}/>
+        <Dropzonee image={image} setImage={setImage} type={type}/>
       )}
 
       <Divider sx={{ margin: "1.25rem 0" }} />
 
       <FlexBetween>
-        <FlexBetween gap="0.25rem" onClick={() => setIsImage(!isImage)}>
+        <FlexBetween gap="0.25rem" onClick={() => {setType('img');setIsImage(!isImage)}}>
         <Tooltip title='Add Photo'>
           <ImageOutlined sx={{ color: mediumMain }} />
 
@@ -97,7 +104,7 @@ function CreatePostWidget() {
 
         
           <>
-            <FlexBetween gap="0.25rem" onClick={() => setIsImage(!isImage)}>
+            <FlexBetween gap="0.25rem" onClick={() => {setType('clip');setIsImage(!isImage)}}>
             <Tooltip title="Add Video">
               <GifBoxOutlined sx={{ color: mediumMain, }} />
               </Tooltip>
@@ -124,7 +131,7 @@ function CreatePostWidget() {
  
 
         <Button
-          disabled={!text && !image}
+          disabled={!isFormat && !image}
           onClick={handlePost}
           sx={{
             color: palette.background.alt,

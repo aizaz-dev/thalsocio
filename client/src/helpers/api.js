@@ -1,10 +1,9 @@
 import axios from "axios";
-import {useSelector} from 'react-redux'
+
 
 const API = axios.create({ baseURL: "http://localhost:3001" });
 const getLoggedInUser=()=>{
    return JSON.parse(localStorage.getItem("user"))._id;
-  //  const loggedInUserId = useSelector(state=>state.user._id);
 }
 
 API.interceptors.request.use((req) => {
@@ -35,10 +34,9 @@ export const fetchStoriesByCreator = (userId, page, trend, sort) =>
   API.get(`/api/story/u/${userId}/${getLoggedInUser()}?page=${page}&sortby=${trend}${sort}`);
 export const deleteStory = (storyId, userId) =>
   API.delete(`/api/Story/${storyId}/${userId}`);
-export const likeStory = (body) =>
+export const VoteStory = (body) =>
   API.put(
     `/api/vote`,
-
     body
   );
   export const createStory = (newStory) => API.post(`/api/story/create/${getLoggedInUser()}`, newStory);
@@ -46,8 +44,5 @@ export const likeStory = (body) =>
   export const updateStory = (id, updatedStory) =>
   API.patch(`/api/story/${id}`, updatedStory);
   export const addComment = (newComment) =>
-  API.post(`/api/comment/`, newComment,{
-    headers: {
-    'Content-Type': 'text/plain'
-    }
-  });
+  API.post(`/api/comment`, newComment);
+  export const fetchComment=(postId)=>API.get(`/api/comment/${postId}`)

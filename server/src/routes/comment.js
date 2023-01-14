@@ -4,7 +4,7 @@ const {addComment,readComment}=require('../Controllers/comment')
 const {requireSignin,isAuth} =require('../Controllers/auth');
 const router=express.Router();
 
-router.post("/comment",requireSignin,addComment)
-router.get("/comment/:storyId",requireSignin,readComment)
+router.post("/comment",requireSignin(),addComment)
+router.get("/comment/:storyId",requireSignin(),readComment)
 
 module.exports=router; 
