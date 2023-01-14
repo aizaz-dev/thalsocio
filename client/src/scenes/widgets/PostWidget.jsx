@@ -15,6 +15,7 @@ import {
   Typography,
   useTheme,
   CardMedia,
+  Button,
 } from "@mui/material";
 import FlexBetween from "../../components/FlexBetween";
 import Author from "../../components/Author";
@@ -27,6 +28,7 @@ import { setPost } from "../../state";
 import EditPostWidget from "./EditPostWidget";
 import { imgPath,postType } from "../../helpers/functions";
 import { deleteStory, VoteStory, fetchComment } from "../../helpers/api";
+import Description from "../../components/Description";
 
 const PostWidget = ({
   postId,
@@ -130,9 +132,8 @@ const PostWidget = ({
               />
             </Popover>
           </Box>
-          <Typography color={main} sx={{ mt: "1rem" }}>
-            <span dangerouslySetInnerHTML={{ __html: description }} />
-          </Typography>
+     
+          <Description text={description} content={content}/>
           {content && (
             <CardMedia
               component={contentType}

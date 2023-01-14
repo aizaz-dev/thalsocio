@@ -6,6 +6,7 @@ import PostWidget from "./PostWidget";
 import GridPostWidget from "./GridPostWidget";
 import { fetchStoriesByCreator,fetchStories } from "../../helpers/api";
 
+
 const PostsWidget = ({ userId, pageType }) => {
   const [isDeleted, setDeleted] = useState(false);
   const dispatch = useDispatch();
