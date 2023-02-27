@@ -10,6 +10,7 @@ function PageWidget() {
     const handleChange=(event,value)=>{
       console.log(page,value)
          dispatch(setPage({page:value}))
+         window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
     }
   return (
     <WidgetWraper>

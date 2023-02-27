@@ -21,7 +21,7 @@ function Description({ text, content }) {
           <Typography color={main}>
             <span dangerouslySetInnerHTML={{ __html: text }} />
           </Typography>
-          <Button  sx={style} onClick={() => setExpanded(false)}>
+          <Button size='small' sx={style} onClick={() => setExpanded(false)}>
             Show Less
           </Button>
         </>

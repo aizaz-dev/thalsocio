@@ -28,7 +28,7 @@ function Dropzonee({image,setImage,type}) {
 
 
   return(
-    <div {...getRootProps()}>
+    
   <Box
           border={`1px solid ${medium}`}
           borderRadius="5px"
@@ -67,7 +67,7 @@ function Dropzonee({image,setImage,type}) {
             )}
   
         </Box>
-        </div>
+        
         )
   }
   export default Dropzonee

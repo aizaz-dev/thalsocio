@@ -93,7 +93,7 @@ const PostWidget = ({
     //getComments()
   }, []);
   return (
-    <WidgetWrapper m="2rem 0">
+    <WidgetWrapper m="0.5rem 0">
       {isDeleted && <Box>This post is deleted.</Box>}
       {!isDeleted && (
         <>

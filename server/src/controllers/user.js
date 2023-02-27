@@ -1,7 +1,6 @@
 const User = require("../Models/user");
 const Story = require("../Models/story"); 
-const multer = require("multer");
-
+const mongoose=require('mongoose')
 exports.userById = async (req, res, next, id) => {
 if(id=="undefined"){
   return res.status(400).json({error:"Invalid user id"}) 
@@ -16,23 +15,49 @@ if(id=="undefined"){
   });
 };
  
-exports.read = (req, res) => {
-  req.profile.hashed_password = undefined;
-  req.profile.salt = undefined;
-  return res.status(200).json(req.profile);
+exports.read = async (req, res) => {
+  const userIdForSearch=mongoose.Types.ObjectId(req.params.userId)
+  const User=await Story.aggregate([
+    {$match:{userId:userIdForSearch}},
+    {$group:{
+      _id:'$userId',
+      count:{$count:{}},
+      upVote:{$sum:'$upVote'},
+      downVote:{$sum:'$downVote'}
+    }},
+    {
+      $lookup: {
+        from: "users",
+        localField: "_id",
+        foreignField: "_id",
+        as: "User",
+      },
+    },
+    {
+      $unwind: "$User",
+    },
+    {
+      $addFields:{
+        userName: "$User.name",
+        userPic: "$User.pic",
+        user_name:"$user.user_name"
+      }
+    },
+    {$project:{
+      _id:1,
+      count:1,
+      upVote:1,
+      downVote:1,
+      userName:1,
+      userPic:1
+    }}
+  ])
+console.log(User)
+  return res.status(200).json(User);
 
 };
 
-const storage = multer.memoryStorage();
-let upload = multer({
-  storage,
-  fileFilter: (req, file, cb) => {
-    //if (mimeTypes.includes(file.mimetype)) {
-    return cb(null, true);
-    //}
-    //cb('File type not allowed', false);
-  },
-}).any();
+
 
 exports.update = (req, res) => {
   upload(req, res, (err) => {

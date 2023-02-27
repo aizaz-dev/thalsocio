@@ -32,6 +32,12 @@ const userSchema=new Schema({
     },
     pic:{
         type:String,
+    },
+    location:{
+        type:String
+    },
+    occupation:{
+        type:String
     }
 
  

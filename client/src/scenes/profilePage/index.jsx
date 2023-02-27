@@ -1,4 +1,4 @@
-import React from 'react'
+import React,{createContext} from 'react'
 import { Box, useMediaQuery } from "@mui/material";
 import { useSelector } from "react-redux";
 import { useParams } from 'react-router-dom';
@@ -12,6 +12,7 @@ import PageWidget from '../widgets/PageWidget';
 function ProfilePage() {
   const isNonMobileScreens = useMediaQuery("(min-width:1000px)");
   const {userId}  = useParams();
+ 
   return (
     <Box>
       <Navbar/>

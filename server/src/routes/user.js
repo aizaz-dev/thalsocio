@@ -7,7 +7,7 @@ const router=express.Router();
 
 //testing
 router.get("/user/leaderboard",requireSignin(),leaderboard)
-router.get("/user/:userId",requireSignin(),isAuth,read);
+router.get("/user/:userId",requireSignin(),read);
 router.put("/user/profilePic/:userId",requireSignin(),isAuth,upload.single('pic'),updatePic)
 router.put("/user/:userId",requireSignin(),isAuth,update);
 router.param("userId",userById);

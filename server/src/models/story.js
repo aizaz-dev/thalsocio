@@ -22,6 +22,10 @@ const storySchema=new Schema({
     downVote:{
         type:Number,
         default:0
+    },
+    visibility:{
+        type:Boolean,
+        default:false
     }
 
 
