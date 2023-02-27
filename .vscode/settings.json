@@ -1,0 +1,5 @@
+{
+    "docify.commentService.programmingLanguage": "javascript",
+    "docify.commentService.docstringFormat": "JsDoc",
+    "docify.commentService.autoTranslationService": "English"
+}

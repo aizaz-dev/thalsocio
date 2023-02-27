@@ -1,4 +1,6 @@
-//Require
+
+// Require and load all of the configuration blocks required by the consensus module. This is the function that should be called in order to ensure that all configuration blocks are loaded
+
 require("dotenv").config(); //for getting config
 const express = require("express"); //for using express app
 const morgan = require("morgan"); //for logging server requests
@@ -15,7 +17,7 @@ const storyRoutes = require("./Routes/story");
 const voteRoutes = require("./Routes/vote");
 const commentRoutes = require("./Routes/comment");
 
-// const productRoutes=require('./Routes/product')
+
 //variable
 const port = process.env.PORT || 3001;
 const db = process.env.MONGO_URI;
@@ -34,7 +36,7 @@ app.use("/api/*", function (req, res, next) {
   res.header("Access-Control-Allow-Methods", "GET, PUT, POST, PATCH, DELETE");
   next();
 });
-app.use(cookieParser());
+app.use(cookieParser()); //The cookieParser is responsible for parsing cookies
 app.use(bodyParser.json());
 app.use("/assets", express.static("assets"));
 
