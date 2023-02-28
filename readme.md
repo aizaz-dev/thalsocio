@@ -107,19 +107,19 @@ Login Page
 Register Page
 ![Register](docs/register.png)
 
-- `scenes/homePage.jsx` After login user will be redirected to home page which display info about user logged in, navbar, stories posted, sort and grid filter pannels.
+- `scenes/homePage.jsx` After login user will be redirected to home page which display info about user logged in, navbar, stories posted, sort and grid filter pannels.\
 Home Page [Light Mode]
 - ![homepage](docs/home%20W.png)
 
 Home Page [Dark Mode]
 - ![homepage](docs/home%20B.png)
 
-- `scenes/trendingPage.jsx` Display all stories sorted by upVotes.
+- `scenes/trendingPage.jsx` Display all stories sorted by upVotes.\
 Trending Page [Light Mode]
 - ![trendingPage](docs/trending%20W.png)
 Trending Page [Dark Mode]
 - ![trendingPage](docs/trending%20B.png)
-- `scenes/Leaderboard.jsx` Display top users with highest upVotes and their stats.
+- `scenes/Leaderboard.jsx` Display top users with highest upVotes and their stats.\
 Leaderboard Page [Light Mode]
 - ![leaderboard](docs/leaderboard%20w.png)
 Leaderboard Page [Dark Mode]
@@ -133,12 +133,12 @@ Leaderboard Page [Dark Mode]
 - `components/postWidget.jsx` Render component for displaying a story.
  ![Display Story](docs/story.png)
 - `components/createPostWidget.jsx` Render component for creating a story.
- ![Create Story](docs/create%20post.png)
-- `components/editPostWidget.jsx` Render component for edit a posted story.
+ ![Create Story](docs/create.png)
+- `components/editPostWidget.jsx` Render component for edit a posted story.\
  ![Edit Story](docs/edit.png)
-- `components/sortWidget.jsx` Render component containing sort buttons.
+- `components/sortWidget.jsx` Render component containing sort buttons.\
  ![Sort Story](docs/sort.png)
-- `components/commentWidget.jsx` Render component which display comments.
+- `components/commentWidget.jsx` Render component which display comments.\
  ![Comment](docs/comment.PNG)
 
 ## Liscence
@@ -163,17 +163,21 @@ watch the results in the right.
 
 Digital Stories uses a number of open source projects to work properly:
 
-- [AngularJS] - HTML enhanced for web apps!
-- [Ace Editor] - awesome web-based text editor
-- [markdown-it] - Markdown parser done right. Fast and easy to extend.
-- [Twitter Bootstrap] - great UI boilerplate for modern web apps
+- [ReactJS] - HTML enhanced for web apps!
+- [formik] - awesome web-based text editor
+- [jodit-react] - awesome web-based text editor
+- [node-html-parser] - awesome web-based text editor
+- [react-redux] - awesome web-based text editor
+- [yup] - awesome web-based text editor
 - [node.js] - evented I/O for the backend
-- [Express] - fast node.js network app framework [@tjholowaychuk]
-- [Gulp] - the streaming build system
-- [Breakdance](https://breakdance.github.io/breakdance/) - HTML
-to Markdown converter
-- [jQuery] - duh
-
+- [Express] - fast node.js network app framework 
+- [body-parser] - the streaming build system
+- [cookie-parser] - the streaming build system
+- [dotenv] - the streaming build system
+- [express-jwt] - the streaming build system
+- [bcrypt] - the streaming build system
+- [jsonwebtoken] - the streaming build system
+- [mongoose] - the streaming build system
 
 
 ## Plugins
@@ -189,41 +193,3 @@ Instructions on how to use them in your own application are linked below.
 | OneDrive | [plugins/onedrive/README.md][PlOd] |
 | Medium | [plugins/medium/README.md][PlMe] |
 | Google Analytics | [plugins/googleanalytics/README.md][PlGa] |
-
-
-#### Building for source
-
-For production release:
-
-```sh
-gulp build --prod
-```
-
-Generating pre-built zip archives for distribution:
-
-```sh
-gulp build dist --prod
-```
-
-out when the markdown processor does its job. There is no need to format nicely because it shouldn't be seen. Thanks SO - http://stackoverflow.com/questions/4823468/store-comments-in-markdown-syntax)
-
-   [dill]: <https://github.com/joemccann/dillinger>
-   [git-repo-url]: <https://github.com/joemccann/dillinger.git>
-   [john gruber]: <http://daringfireball.net>
-   [df1]: <http://daringfireball.net/projects/markdown/>
-   [markdown-it]: <https://github.com/markdown-it/markdown-it>
-   [Ace Editor]: <http://ace.ajax.org>
-   [node.js]: <http://nodejs.org>
-   [Twitter Bootstrap]: <http://twitter.github.com/bootstrap/>
-   [jQuery]: <http://jquery.com>
-   [@tjholowaychuk]: <http://twitter.com/tjholowaychuk>
-   [express]: <http://expressjs.com>
-   [AngularJS]: <http://angularjs.org>
-   [Gulp]: <http://gulpjs.com>
-
-   [PlDb]: <https://github.com/joemccann/dillinger/tree/master/plugins/dropbox/README.md>
-   [PlGh]: <https://github.com/joemccann/dillinger/tree/master/plugins/github/README.md>
-   [PlGd]: <https://github.com/joemccann/dillinger/tree/master/plugins/googledrive/README.md>
-   [PlOd]: <https://github.com/joemccann/dillinger/tree/master/plugins/onedrive/README.md>
-   [PlMe]: <https://github.com/joemccann/dillinger/tree/master/plugins/medium/README.md>
-   [PlGa]: <https://github.com/RahulHP/dillinger/blob/master/plugins/googleanalytics/README.md>
