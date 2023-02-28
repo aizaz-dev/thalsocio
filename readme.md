@@ -101,32 +101,45 @@ The frontend of the app is built using React with redux. Frontend code is mainly
 #### 1. State:
 - `state/index.js` contain code of redux state in a single file. Redux toolkit is used to optimze writing the code.
 #### 2. Scenes:
-- `scenes/loginPage.js` contain forms for login and registration page both.
+- `scenes/loginPage.jsx` contain forms for login and registration page both.
+Login Page
 ![Login](docs/login.png)
+Register Page
 ![Register](docs/register.png)
 
-- `scenes/homePage.js` After login user will be redirected to home page which display info about user logged in, navbar, stories posted, sort and grid filter pannels.
-![homepage](docs/home%20W.png)
-![homepage](docs/home%20B.png)
-- `scenes/trendingPage.js` Display all stories sorted by upVotes.
+- `scenes/homePage.jsx` After login user will be redirected to home page which display info about user logged in, navbar, stories posted, sort and grid filter pannels.
+Home Page [Light Mode]
+- ![homepage](docs/home%20W.png)
+
+Home Page [Dark Mode]
+- ![homepage](docs/home%20B.png)
+
+- `scenes/trendingPage.jsx` Display all stories sorted by upVotes.
+Trending Page [Light Mode]
 - ![trendingPage](docs/trending%20W.png)
+Trending Page [Dark Mode]
 - ![trendingPage](docs/trending%20B.png)
-- `scenes/Leaderboard.js` Display top users with highest upVotes and their stats.
+- `scenes/Leaderboard.jsx` Display top users with highest upVotes and their stats.
+Leaderboard Page [Light Mode]
 - ![leaderboard](docs/leaderboard%20w.png)
+Leaderboard Page [Dark Mode]
 - ![leaderboard](docs/leaderboard%20b.png)
-- `scenes/profilePage.js` contain all stories posted by user whose profile is being visited.
+- `scenes/profilePage.jsx` contain all stories posted by user whose profile is being visited.
 - ![profilePage](docs/home%20B.png)
-- `scenes/pageNotFound.js` Display 404 page.
+- `scenes/pageNotFound.jsx` Display 404 page.
 - ![404 Page](docs/404.png)
-- 
-#### 1. Components:
-- 
-#### 1. Widgets:
-- 
 
-## Contributing
-
-## Troubleshooting 
+#### 2. Widgets:
+- `components/postWidget.jsx` Render component for displaying a story.
+ ![Display Story](docs/story.png)
+- `components/createPostWidget.jsx` Render component for creating a story.
+ ![Create Story](docs/create%20post.png)
+- `components/editPostWidget.jsx` Render component for edit a posted story.
+ ![Edit Story](docs/edit.png)
+- `components/sortWidget.jsx` Render component containing sort buttons.
+ ![Sort Story](docs/sort.png)
+- `components/commentWidget.jsx` Render component which display comments.
+ ![Comment](docs/comment.PNG)
 
 ## Liscence
 
