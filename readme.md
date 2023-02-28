@@ -3,13 +3,7 @@
 
 [![Build Status](https://travis-ci.org/joemccann/dillinger.svg?branch=master)](https://travis-ci.org/joemccann/dillinger)
 
-- `What the product is about`
-- `What it does`
-- `Who can be user`
-- `what is scope of project`
-- `Features of software`
 - `ERD`
-- `installation`
 - `softwre hardware requirement`
 - `Non functional Reuirement`
 - `Future `
@@ -76,9 +70,13 @@ The app is built using the MERN stack:
 - MongoDB for the database
 - Express.js for the server
 - React for the client
+- Redux for client side store management
 - Node.js as the runtime environment
 
 ### Backend
+##### Entity Relationship Diagram (ERD)
+![This is an image](\server\assets\docs)
+
 The backend of the app is built using Express.js and Node.js. Here are the main components:
 - `server.js`: The main server file that sets up the Express.js app and connects to the database.
 - `routes/notes.js`: Defines the API endpoints for CRUD operations on notes.
