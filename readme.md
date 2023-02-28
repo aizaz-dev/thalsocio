@@ -3,11 +3,39 @@
 
 [![Build Status](https://travis-ci.org/joemccann/dillinger.svg?branch=master)](https://travis-ci.org/joemccann/dillinger)
 
-Digital Stories is a simple MERN stack app that allows users to create, read, update, and delete notes.
+- `What the product is about`
+- `What it does`
+- `Who can be user`
+- `what is scope of project`
+- `Features of software`
+- `ERD`
+- `installation`
+- `softwre hardware requirement`
+- `Non functional Reuirement`
+- `Future `
+
+The project "Digital Story" is a web application that allows users to create and share stories in various formats, including text, image, and video. The application has a front end built using React with Redux, and a back end consisting of a RESTful API and a database.
 
 - Type some Markdown on the left
 - See HTML in the right
 - ✨Magic ✨
+
+## Features
+-  `Registration`: Registration requires the user to enter their name, a unique username, a correctly formatted email address, and an optional profile picture.
+-  `Login`: User Has to log in to create and view stories. If the user attempts to navigate to another page by entering the address in the address bar, they will be asked to log in before being directed to the requested page.
+-   `Authoring Story`: Create a new story for authoring. Author a story with text, image, and video components.
+- `Persistent Stories`:  Stories will be persistent for later access to preview, edit, and delete. 
+- `Story View`: Stories will be displayed in either a list format, one below the other, or a grid format, based on the user's choice
+- `Story Formatting`: Users will be able to style their stories with colors and fonts, as well as position and order them.
+- `Private Stries`: All stories will be private by default, but users can choose to make them public. If a story is made public, it will be visible to all users
+- `Story Vote`: Users can upvote/downvote stories, view the number of upvotes/downvotes a story has received, and what percentage of total users have reacted to a particular story.
+- `Story Comment`:Users can comment on stories, and the trending stories feature is available at the /trending route.
+- `Engagement`: In “engagement,” a user can see which stories they have reacted to and which of their stories other users have reacted to.
+- `Trending`: Trending stories feature should be available at the /trending route. Trending stories include the most upvoted stories from all users.
+- `Leaderboard`: The leaderboard is available at the /leaderboard route and shows each user's name, picture, total number of stories posted, and total upvotes received from all stories combined.
+- `Sortable Stories`: Stories are sortable by creation timestamp, upvotes, and downvotes for each user and all users.
+- `Dark/Bright Mode`: User can switch between dark and bright mode using a button in navbar.
+
 
 ## Getting Started
 
@@ -15,19 +43,31 @@ Digital Stories is a simple MERN stack app that allows users to create, read, up
 To install the app, follow these steps:
 1. Clone the repository:
 ```bash
-    git clone https://github.com/yourusername/mynotes.git
+    git clone https://github.com/syedwastil/MemoriesApp
 ```
 2. Install the dependencies:
-```bash
-    cd mynotes
-    npm install
-```
+    1. Open terminal for `server` and run:
+        ```bash
+            cd memoriesApp/server
+            npm install
+        ```
+    2. One another terminal for `client` and run:
+        ```bash
+            cd memoriesApp/client
+            npm install
+        ```
 
 ### Running the App
-To run the app, use the following command:
-```bash
-    npm start
-```
+We will run server app and client app seperately.
+1. For `Server` app:
+    ```bash
+        npm start
+    ```
+2. For `Client` app:
+    ```bash
+        npm run dev
+    ```
+
 This will start the server and the client, and open the app in your default browser.
 
 ## Architecture
