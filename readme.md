@@ -1,12 +1,4 @@
 # Digital Stories
-[![N|Solid](https://cldup.com/dTxpPi9lDf.thumb.png)](https://nodesource.com/products/nsolid)
-
-[![Build Status](https://travis-ci.org/joemccann/dillinger.svg?branch=master)](https://travis-ci.org/joemccann/dillinger)
-
-
-- `softwre hardware requirement`
-- `Non functional Reuirement`
-- `Future `
 
 The project "Digital Story" is a web application that allows users to create and share stories in various formats, including text, image, and video. The application has a front end built using React with Redux, and a back end consisting of a RESTful API and a database.
 
