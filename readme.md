@@ -75,7 +75,7 @@ The app is built using the MERN stack:
 
 ### Backend
 ##### Entity Relationship Diagram (ERD)
-![This is an image](\server\assets\docs)
+![This is an image](docs/erd.png)
 
 The backend of the app is built using Express.js and Node.js. Here are the main components:
 - `server.js`: The main server file that sets up the Express.js app and connects to the database.
