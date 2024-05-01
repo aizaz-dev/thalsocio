@@ -21,6 +21,7 @@
     "draft-js": "^0.11.7",
     "formik": "^2.2.9",
     "jodit-react": "^1.3.32",
+    "ngrok": "^5.0.0-beta.2",
     "node-html-parser": "^6.1.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
